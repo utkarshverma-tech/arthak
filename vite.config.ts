@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
+import { nitro } from "nitro/vite";
 
 export default defineConfig({
   resolve: {
@@ -41,14 +42,13 @@ export default defineConfig({
       server: { entry: "server" },
     }),
     react(),
+    nitro({
+      preset: "vercel",
+      output: {
+        dir: ".vercel/output",
+        serverDir: ".vercel/output/functions/__server.func",
+        publicDir: ".vercel/output/static",
+      },
+    }),
   ],
-  // @ts-ignore
-  nitro: {
-    preset: "vercel",
-    output: {
-      dir: ".vercel/output",
-      serverDir: ".vercel/output/functions/__server.func",
-      publicDir: ".vercel/output/static",
-    },
-  },
 });
