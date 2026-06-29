@@ -4,12 +4,16 @@ import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { CATEGORIES } from "@/lib/roadmaps-data";
 import logoImg from "@/assets/logo.png";
+import { useAuth } from "@/lib/auth/AuthContext";
+import { UserMenu } from "@/components/auth/UserMenu";
+
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [roadmapsOpen, setRoadmapsOpen] = useState(false);
   const [activeCat, setActiveCat] = useState<string | null>(null);
   const [mobileRoadmapsOpen, setMobileRoadmapsOpen] = useState(false);
   const [mobileActiveCat, setMobileActiveCat] = useState<string | null>(null);
+  const { isAuthenticated, openModal } = useAuth();
 
   return (
     <header
@@ -367,23 +371,31 @@ export function Header() {
 
         {/* Right actions */}
         <div className="ml-auto flex items-center gap-2">
-          <a
-            href="#"
-            className="hidden sm:inline-flex rounded-md px-3 py-2 text-sm font-medium transition hover:bg-black/5"
-            style={{ color: "#0F172A" }}
-          >
-            Login
-          </a>
-          <a
-            href="#"
-            className="hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
-            style={{
-              background: "linear-gradient(135deg, #14B8A6, #3B82F6)",
-            }}
-          >
-            Start Career Journey
-            <ArrowRight className="h-3.5 w-3.5" />
-          </a>
+          {isAuthenticated ? (
+            <UserMenu />
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={() => openModal("login")}
+                className="hidden sm:inline-flex rounded-full border px-4 py-2 text-sm font-medium transition hover:bg-black/5"
+                style={{ color: "#0F172A", borderColor: "rgba(15,23,42,0.15)" }}
+              >
+                Login
+              </button>
+              <button
+                type="button"
+                onClick={() => openModal("signup")}
+                className="hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
+                style={{
+                  background: "linear-gradient(135deg, #14B8A6, #3B82F6)",
+                }}
+              >
+                Start Career Journey
+                <ArrowRight className="h-3.5 w-3.5" />
+              </button>
+            </>
+          )}
           <button
             className="lg:hidden rounded-md p-2 hover:bg-black/5"
             onClick={() => setMobileOpen((v) => !v)}
@@ -486,16 +498,29 @@ export function Header() {
             </Link>
             <a href="#features" className="py-1.5 text-sm font-medium" style={{ color: "#0F172A" }} onClick={() => setMobileOpen(false)}>Features</a>
             <a href="#about" className="py-1.5 text-sm font-medium" style={{ color: "#0F172A" }} onClick={() => setMobileOpen(false)}>About</a>
-            <a href="#dashboard" className="py-1.5 text-sm font-medium" style={{ color: "#0F172A" }} onClick={() => setMobileOpen(false)}>Dashboard</a>
-            <a href="#" className="text-sm font-medium" style={{ color: "#0F172A" }}>Login</a>
-            <a
-              href="#"
-              className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-white"
-              style={{ background: "linear-gradient(135deg, #14B8A6, #3B82F6)" }}
-            >
-              Start Career Journey
-              <ArrowRight className="h-3.5 w-3.5" />
-            </a>
+            {isAuthenticated ? (
+              <Link to="/dashboard" className="py-1.5 text-sm font-medium" style={{ color: "#0F172A" }} onClick={() => setMobileOpen(false)}>Dashboard</Link>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => { setMobileOpen(false); openModal("login"); }}
+                  className="text-left py-1.5 text-sm font-medium font-semibold"
+                  style={{ color: "#0F172A" }}
+                >
+                  Login
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setMobileOpen(false); openModal("signup"); }}
+                  className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-white"
+                  style={{ background: "linear-gradient(135deg, #14B8A6, #3B82F6)" }}
+                >
+                  Start Career Journey
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}

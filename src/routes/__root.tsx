@@ -4,13 +4,18 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
+import { reportError } from "../lib/error-reporting";
+import { AuthProvider } from "../lib/auth/AuthContext";
+import { AuthModal } from "../components/auth/AuthModal";
+import { ArthakLoader } from "../components/auth/ArthakLoader";
 
 function NotFoundComponent() {
   return (
@@ -38,7 +43,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    reportError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
   return (
@@ -77,14 +82,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Arthak — Career Operating System" },
+      { name: "description", content: "Arthak Career Operating System for Students" },
+      { name: "author", content: "Arthak" },
+      { property: "og:title", content: "Arthak — Career Operating System" },
+      { property: "og:description", content: "Arthak Career Operating System for Students" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:site", content: "@Arthak" },
     ],
     links: [
       {
@@ -115,11 +120,85 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const isPending = useRouterState({ select: (s) => s.status === "pending" });
+  const [mounted, setMounted] = useState(false);
+  const [activeRequests, setActiveRequests] = useState(0);
+  const [showOverlay, setShowOverlay] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Global Fetch Interceptor to capture async button calls, API requests, slow internet queries
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const originalFetch = window.fetch;
+    window.fetch = async (...args) => {
+      setActiveRequests((prev) => prev + 1);
+      try {
+        return await originalFetch(...args);
+      } finally {
+        setActiveRequests((prev) => Math.max(0, prev - 1));
+      }
+    };
+
+    return () => {
+      window.fetch = originalFetch;
+    };
+  }, []);
+
+  // Debounced loader trigger: delays overlay by 200ms to keep fast clicks/loads snappy,
+  // but shows the loader for slow internet, routing transitions, resume processing, or API delays.
+  useEffect(() => {
+    const needsLoading = isPending || activeRequests > 0;
+    
+    if (needsLoading) {
+      const timer = setTimeout(() => {
+        setShowOverlay(true);
+      }, 200);
+      return () => clearTimeout(timer);
+    } else {
+      setShowOverlay(false);
+    }
+  }, [isPending, activeRequests]);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <AuthProvider>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+        <AuthModal />
+        
+        {/* Global Page & API Transition Loader */}
+        <AnimatePresence>
+          {mounted && showOverlay && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 9999,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "rgba(250, 247, 242, 0.45)",
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
+                pointerEvents: "none", // Never blocks clicks under any circumstances
+              }}
+            >
+              <ArthakLoader size={46} speed={1.0} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

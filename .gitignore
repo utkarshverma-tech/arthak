@@ -30,3 +30,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables & Vercel
+.env
+.env.*
+.vercel/
+
