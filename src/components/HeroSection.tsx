@@ -228,32 +228,60 @@ function CareerJourney() {
               }}
             >
               <div style={{ animation: "arthak-orbit-rev 60s linear infinite" }}>
-              <div
-                className="flex items-center gap-2 rounded-2xl border px-3 py-2 backdrop-blur-md"
-                style={{
-                  backgroundColor: "rgba(255,255,255,0.92)",
-                  borderColor: "rgba(20,184,166,0.3)",
-                  boxShadow: "0 10px 24px -10px rgba(15,23,42,0.18)",
-                }}
-              >
-                <span
-                  className="flex h-7 w-7 items-center justify-center rounded-lg"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, rgba(20,184,166,0.18), rgba(59,130,246,0.18))",
-                    color: "#0D9488",
+                <motion.div
+                  whileHover="hover"
+                  animate="initial"
+                  initial="initial"
+                  variants={{
+                    initial: {
+                      y: 0,
+                      scale: 1,
+                      backgroundColor: "rgba(255, 255, 255, 0.92)",
+                      borderColor: "rgba(20, 184, 166, 0.3)",
+                      boxShadow: "0 10px 24px -10px rgba(15,23,42,0.18)",
+                    },
+                    hover: {
+                      y: -12,
+                      scale: 1.06,
+                      backgroundColor: "rgba(255, 255, 255, 1)",
+                      borderColor: "rgba(20, 184, 166, 0.75)",
+                      boxShadow: "0 25px 40px -10px rgba(20,184,166,0.35), 0 8px 20px -6px rgba(59,130,246,0.25)",
+                    },
                   }}
+                  transition={{ type: "spring", stiffness: 450, damping: 22 }}
+                  className="flex cursor-pointer items-center gap-2.5 rounded-2xl border px-3.5 py-2.5 backdrop-blur-md"
                 >
-                  <Icon className="h-3.5 w-3.5" />
-                </span>
-                <span
-                  className="whitespace-nowrap text-xs font-medium"
-                  style={{ color: "#0F172A" }}
-                >
-                  {node.label}
-                </span>
+                  <motion.span
+                    className="flex h-7.5 w-7.5 items-center justify-center rounded-lg transition-colors duration-300"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, rgba(20,184,166,0.18), rgba(59,130,246,0.18))",
+                      color: "#0D9488",
+                    }}
+                    variants={{
+                      hover: {
+                        scale: 1.1,
+                        background: "linear-gradient(135deg, #14B8A6, #3B82F6)",
+                        color: "#FFFFFF",
+                      },
+                    }}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </motion.span>
+                  <motion.span
+                    className="whitespace-nowrap text-xs font-semibold tracking-wide transition-colors duration-300"
+                    style={{ color: "#0F172A" }}
+                    variants={{
+                      hover: {
+                        color: "#0D9488",
+                      },
+                    }}
+                  >
+                    {node.label}
+                  </motion.span>
+                </motion.div>
               </div>
-              </div>
+
             </div>
           );
         })}
