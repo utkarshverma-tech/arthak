@@ -50,9 +50,9 @@ export function HeroSection() {
       {/* Interactive grid */}
       <InteractiveGrid />
 
-      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:py-28 pointer-events-none">
+      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:py-28">
         {/* LEFT */}
-        <div className="pointer-events-auto">
+        <div>
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -164,7 +164,7 @@ function CareerJourney() {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.9, delay: 0.2 }}
-      className="relative mx-auto flex aspect-square w-full max-w-[520px] items-center justify-center pointer-events-auto"
+      className="relative mx-auto flex aspect-square w-full max-w-[520px] items-center justify-center"
     >
       {/* Slow rotating orbit container (CSS keyframes for perfect sync with counter-rotation) */}
       <style>{`
