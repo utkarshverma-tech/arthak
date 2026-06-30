@@ -12,6 +12,7 @@ import {
   Sparkles,
   GraduationCap,
 } from "lucide-react";
+import { InteractiveGrid } from "./InteractiveGrid";
 
 const NODES = [
   { icon: Compass, label: "Career Assessment", angle: 0 },
@@ -46,15 +47,8 @@ export function HeroSection() {
         className="pointer-events-none absolute -bottom-40 -right-40 h-[600px] w-[600px] rounded-full opacity-30 blur-3xl"
         style={{ background: "radial-gradient(circle, #BFD7FF 0%, transparent 70%)" }}
       />
-      {/* Subtle grid */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "linear-gradient(#0F172A 1px, transparent 1px), linear-gradient(90deg, #0F172A 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-        }}
-      />
+      {/* Interactive grid */}
+      <InteractiveGrid />
 
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:py-28">
         {/* LEFT */}
