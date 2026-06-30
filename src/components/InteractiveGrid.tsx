@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 
 /**
- * A full-bleed grid of subtle cells. When the cursor moves, the cells within
- * a radius lift up and glow with an orange-to-amber band oklch color — so it
- * looks like a living surface reacting to the viewer.
+ * A highly-optimized grid of subtle cells. When the cursor moves, the cells within
+ * a radius lift up and glow with an orange-to-amber band oklch color.
+ * Uses GPU-accelerated transforms, string concatenation, and no heavy box-shadow paints.
  */
 export function InteractiveGrid({
-  cell = 56,
-  radius = 170,
+  cell = 64, // Larger cell size (64px) means fewer DOM nodes = better performance
+  radius = 160,
 }: {
   cell?: number;
   radius?: number;
@@ -32,12 +32,13 @@ export function InteractiveGrid({
       const rows = Math.ceil(h / cell) + 1;
       sizeRef.current = { cols, rows };
 
-      wrap.style.gridTemplateColumns = `repeat(${cols}, ${cell}px)`;
-      wrap.style.gridTemplateRows = `repeat(${rows}, ${cell}px)`;
+      wrap.style.gridTemplateColumns = "repeat(" + cols + ", " + cell + "px)";
+      wrap.style.gridTemplateRows = "repeat(" + rows + ", " + cell + "px)";
       wrap.innerHTML = "";
       const frag = document.createDocumentFragment();
       const next: HTMLDivElement[] = [];
-      for (let i = 0; i < cols * rows; i++) {
+      const total = cols * rows;
+      for (let i = 0; i < total; i++) {
         const d = document.createElement("div");
         d.className = "arthak-grid-cell";
         frag.appendChild(d);
@@ -71,14 +72,13 @@ export function InteractiveGrid({
     window.addEventListener("pointerleave", onLeave);
 
     const tick = () => {
-      const { cols } = sizeRef.current;
+      const { cols, rows } = sizeRef.current;
       const cells = cellsRef.current;
       if (cells.length && cols) {
         const { x: mx, y: my } = mouseRef.current;
         const r2 = radius * radius;
         const minCol = Math.max(0, Math.floor((mx - radius) / cell));
         const maxCol = Math.min(cols - 1, Math.ceil((mx + radius) / cell));
-        const rows = sizeRef.current.rows;
         const minRow = Math.max(0, Math.floor((my - radius) / cell));
         const maxRow = Math.min(rows - 1, Math.ceil((my + radius) / cell));
 
@@ -95,15 +95,17 @@ export function InteractiveGrid({
               const idx = r * cols + c;
               const cellEl = cells[idx];
               if (!cellEl) continue;
-              const t = 1 - Math.sqrt(d2) / radius; // 0..1
-              const hue = ((c * 4 + r * 7) % 20) + 32; // premium orange-amber band (oklch 32-52)
-              const lift = (t * 14).toFixed(1);
-              const alpha = (t * 0.45).toFixed(3);
-              const glow = (t * 0.35).toFixed(3);
-              cellEl.style.transform = `translate3d(0, -${lift}px, 0)`;
-              cellEl.style.background = `oklch(0.66 0.22 ${hue} / ${alpha})`;
-              cellEl.style.boxShadow = `0 ${(t * 18).toFixed(1)}px ${(t * 36).toFixed(1)}px -8px oklch(0.66 0.22 ${hue} / ${glow})`;
-              cellEl.style.borderColor = `oklch(0.78 0.16 ${hue} / ${(t * 0.55).toFixed(3)})`;
+              
+              const dist = Math.sqrt(d2);
+              const t = 1 - dist / radius; // 0..1
+              const hue = ((c * 4 + r * 7) % 20) + 32; // Orange-amber band
+              const lift = Math.round(t * 12 * 10) / 10;
+              const alpha = Math.round(t * 0.38 * 100) / 100;
+              const borderAlpha = Math.round(t * 0.5 * 100) / 100;
+              
+              cellEl.style.transform = "translate3d(0, -" + lift + "px, 0)";
+              cellEl.style.background = "oklch(0.66 0.22 " + hue + " / " + alpha + ")";
+              cellEl.style.borderColor = "oklch(0.78 0.16 " + hue + " / " + borderAlpha + ")";
               nextActive.add(idx);
             }
           }
@@ -116,7 +118,6 @@ export function InteractiveGrid({
             if (el) {
               el.style.transform = "";
               el.style.background = "";
-              el.style.boxShadow = "";
               el.style.borderColor = "";
             }
           }
