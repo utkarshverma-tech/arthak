@@ -6,7 +6,7 @@ import {
   Briefcase, Trophy, Bot, BarChart3, Settings, User as UserIcon, LogOut,
   Search, Bell, Sparkles, Command, Sun, Moon, ChevronRight, ChevronLeft,
   Play, Clock, ArrowUpRight, CheckCircle2, Circle, Lock, Bookmark, MapPin,
-  Flame, TrendingUp, Send, Plus, X, Star, Zap
+  Flame, TrendingUp, Send, Plus, X, Star, Zap, Menu
 } from "lucide-react";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { useAuth } from "@/lib/auth/AuthContext";
@@ -40,14 +40,26 @@ const C = {
 function DashboardShell() {
   const [collapsed, setCollapsed] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div className="min-h-screen font-sans antialiased" style={{ background: C.bg, color: C.text }}>
       <MeshBackdrop />
       <div className="relative flex">
-        <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+        <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        <AnimatePresence>
+          {sidebarOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSidebarOpen(false)}
+              className="fixed inset-0 z-40 bg-black/15 backdrop-blur-sm lg:hidden"
+            />
+          )}
+        </AnimatePresence>
         <div className="flex-1 min-w-0">
-          <TopNav />
-          <main className="px-6 lg:px-10 pb-24 pt-6 mx-auto max-w-[1400px]">
+          <TopNav setSidebarOpen={setSidebarOpen} />
+          <main className="px-4 sm:px-6 lg:px-10 pb-24 pt-6 mx-auto max-w-[1400px]">
             <Hero />
             <Snapshots />
             <div className="mt-10 grid grid-cols-12 gap-6">
@@ -127,14 +139,15 @@ const NAV = [
   { icon: BarChart3, label: "Analytics" },
 ];
 
-function Sidebar({ collapsed, setCollapsed }: { collapsed: boolean; setCollapsed: (v: boolean) => void }) {
+function Sidebar({ collapsed, setCollapsed, sidebarOpen, setSidebarOpen }: { collapsed: boolean; setCollapsed: (v: boolean) => void; sidebarOpen: boolean; setSidebarOpen: (v: boolean) => void }) {
   const { user, signOut } = useAuth();
   const [active, setActive] = useState("Dashboard");
-  const w = collapsed ? 76 : 260;
   return (
     <aside
-      className="sticky top-0 h-screen shrink-0 border-r transition-[width] duration-300 ease-out"
-      style={{ width: w, borderColor: C.border, background: "rgba(255,255,255,0.75)", backdropFilter: "blur(20px)" }}
+      className={`fixed inset-y-0 left-0 z-50 flex h-screen shrink-0 flex-col border-r transition-transform duration-300 ease-out lg:sticky lg:translate-x-0 w-[260px] ${
+        collapsed ? "lg:w-[76px]" : "lg:w-[260px]"
+      } ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
+      style={{ borderColor: C.border, background: "rgba(255,255,255,0.9)", backdropFilter: "blur(20px)" }}
     >
       <div className="flex h-full flex-col">
         <div className="flex h-16 items-center px-4 overflow-hidden">
@@ -160,7 +173,10 @@ function Sidebar({ collapsed, setCollapsed }: { collapsed: boolean; setCollapsed
               const isActive = active === item.label;
               const Inner = (
                 <button
-                  onClick={() => setActive(item.label)}
+                  onClick={() => {
+                    setActive(item.label);
+                    setSidebarOpen(false);
+                  }}
                   className="group relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold transition"
                   style={{
                     color: isActive ? C.primary : C.muted,
@@ -190,7 +206,11 @@ function Sidebar({ collapsed, setCollapsed }: { collapsed: boolean; setCollapsed
           <ul className="space-y-0.5">
             {[{ icon: Settings, label: "Settings" }, { icon: UserIcon, label: "Profile" }].map((i) => (
               <li key={i.label}>
-                <button className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-semibold transition hover:bg-black/5" style={{ color: C.muted }}>
+                <button
+                  onClick={() => setSidebarOpen(false)}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-semibold transition hover:bg-black/5"
+                  style={{ color: C.muted }}
+                >
                   <i.icon className="h-[18px] w-[18px]" />
                   {!collapsed && <span>{i.label}</span>}
                 </button>
@@ -221,7 +241,7 @@ function Sidebar({ collapsed, setCollapsed }: { collapsed: boolean; setCollapsed
           )}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="mt-2 flex w-full items-center justify-center gap-1 rounded-lg py-1.5 text-[11px] font-medium transition hover:bg-black/5"
+            className="mt-2 hidden lg:flex w-full items-center justify-center gap-1 rounded-lg py-1.5 text-[11px] font-medium transition hover:bg-black/5"
             style={{ color: C.muted }}
           >
             {collapsed ? <ChevronRight className="h-3 w-3" /> : <><ChevronLeft className="h-3 w-3" /> Collapse</>}
@@ -233,19 +253,27 @@ function Sidebar({ collapsed, setCollapsed }: { collapsed: boolean; setCollapsed
 }
 
 /* ============== TOPNAV ============== */
-function TopNav() {
+function TopNav({ setSidebarOpen }: { setSidebarOpen: (v: boolean) => void }) {
   const [dark, setDark] = useState(false);
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b px-6 lg:px-10"
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b px-4 lg:px-10"
       style={{ borderColor: C.border, background: "rgba(255,255,255,0.75)", backdropFilter: "blur(16px)" }}>
+      <button
+        onClick={() => setSidebarOpen(true)}
+        className="lg:hidden p-1.5 rounded-xl border transition hover:bg-black/5 mr-1"
+        style={{ borderColor: C.border }}
+        aria-label="Open sidebar"
+      >
+        <Menu className="h-5 w-5" style={{ color: C.muted }} />
+      </button>
       <div className="relative flex-1 max-w-xl">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" style={{ color: C.muted }} />
         <input
           placeholder="Search anything — roadmaps, projects, internships…"
-          className="h-10 w-full rounded-xl border pl-9 pr-16 text-sm outline-none transition focus:border-zinc-300"
+          className="h-10 w-full rounded-xl border pl-9 pr-4 lg:pr-16 text-sm outline-none transition focus:border-zinc-300"
           style={{ background: "rgba(9,9,11,0.02)", borderColor: C.border, color: C.text }}
         />
-        <kbd className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border px-1.5 py-0.5 text-[10px] font-mono"
+        <kbd className="hidden sm:absolute right-2 top-1/2 -translate-y-1/2 rounded-md border px-1.5 py-0.5 text-[10px] font-mono"
           style={{ borderColor: C.border, color: C.muted, background: "rgba(9,9,11,0.02)" }}>
           <Command className="mr-0.5 inline h-2.5 w-2.5" />K
         </kbd>
