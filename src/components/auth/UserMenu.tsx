@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bell, Flame, Zap, LayoutDashboard, FileText, Map, FolderGit2, Trophy, Award, Settings, LogOut, User as UserIcon } from "lucide-react";
+import { User as UserIcon, Settings, HelpCircle, LogOut } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthContext";
 
 export function UserMenu() {
@@ -11,92 +11,129 @@ export function UserMenu() {
 
   useEffect(() => {
     function onClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setOpen(false);
+      }
     }
     document.addEventListener("mousedown", onClick);
-    return () => document.removeEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKeyDown);
+    };
   }, []);
 
   if (!user) return null;
-  const initials = user.fullName.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
+
+  const initials = user.fullName
+    ? user.fullName
+        .split(" ")
+        .map((p) => p[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase()
+    : "ST";
 
   return (
-    <div className="flex items-center gap-2">
-      <button className="relative rounded-full p-2 transition hover:bg-black/5" aria-label="Notifications">
-        <Bell className="h-4 w-4" style={{ color: "#0F172A" }} />
-        <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full" style={{ background: "#EF4444" }} />
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold text-white shadow-md transition hover:opacity-90 active:scale-95 focus:outline-none"
+        style={{
+          background: "linear-gradient(135deg, #14B8A6, #3B82F6)",
+          border: "2px solid rgba(255, 255, 255, 0.15)",
+        }}
+        aria-label="Account menu"
+      >
+        {user.avatarUrl ? (
+          <img src={user.avatarUrl} alt={user.fullName} className="h-full w-full rounded-full object-cover" />
+        ) : (
+          initials
+        )}
       </button>
-      <div className="hidden sm:flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-semibold" style={{ borderColor: "rgba(15,23,42,0.1)", color: "#0F172A", background: "rgba(255,255,255,0.7)" }}>
-        <Zap className="h-3 w-3" style={{ color: "#F59E0B" }} /> 240 XP
-      </div>
-      <div className="hidden md:flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-semibold" style={{ borderColor: "rgba(15,23,42,0.1)", color: "#0F172A", background: "rgba(255,255,255,0.7)" }}>
-        <Flame className="h-3 w-3" style={{ color: "#EF4444" }} /> 7
-      </div>
 
-      <div className="relative" ref={ref}>
-        <button
-          onClick={() => setOpen((v) => !v)}
-          className="flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold text-white shadow-md transition hover:opacity-90"
-          style={{ background: "linear-gradient(135deg, #14B8A6, #3B82F6)" }}
-          aria-label="Account menu"
-        >
-          {initials}
-        </button>
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              initial={{ opacity: 0, y: -8, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -6, scale: 0.97 }}
-              transition={{ duration: 0.18 }}
-              className="absolute right-0 top-full mt-2 w-64 overflow-hidden rounded-2xl animate-in fade-in slide-in-from-top-2 duration-200"
-              style={{
-                background: "rgba(255,253,248,0.96)",
-                backdropFilter: "blur(20px)",
-                boxShadow: "0 24px 60px -20px rgba(15,23,42,0.35), inset 0 0 0 1px rgba(212,175,55,0.25)",
-                zIndex: 9999
-              }}
-            >
-              <div className="flex items-center gap-3 border-b px-4 py-3" style={{ borderColor: "rgba(15,23,42,0.06)" }}>
-                <div className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-white" style={{ background: "linear-gradient(135deg, #14B8A6, #3B82F6)" }}>
-                  {initials}
-                </div>
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold" style={{ color: "#0F172A" }}>{user.fullName}</p>
-                  <p className="truncate text-xs" style={{ color: "#64748B" }}>{user.email}</p>
-                </div>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.96, filter: "blur(4px)" }}
+            animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+            exit={{ opacity: 0, y: 6, scale: 0.96, filter: "blur(3px)" }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute right-0 top-full mt-2.5 w-[310px] overflow-hidden rounded-[18px] p-4 text-left"
+            style={{
+              background: "rgba(255, 255, 255, 0.85)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              border: "1px solid rgba(9, 9, 11, 0.06)",
+              boxShadow: "0 20px 50px -12px rgba(9, 9, 11, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6)",
+              zIndex: 9999,
+            }}
+          >
+            {/* Top User Section */}
+            <div className="flex items-center gap-3 pb-3 mb-2.5 border-b" style={{ borderColor: "rgba(9, 9, 11, 0.06)" }}>
+              {/* Circular user avatar (48px) */}
+              <div
+                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-base font-bold text-white shadow-sm"
+                style={{
+                  background: "linear-gradient(135deg, #14B8A6, #3B82F6)",
+                  border: "1.5px solid rgba(255, 255, 255, 0.8)",
+                }}
+              >
+                {user.avatarUrl ? (
+                  <img src={user.avatarUrl} alt={user.fullName} className="h-full w-full rounded-full object-cover" />
+                ) : (
+                  initials
+                )}
               </div>
-              <ul className="p-1.5 text-sm">
-                {[
-                  { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
-                  { icon: UserIcon, label: "Profile", to: "/dashboard" },
-                  { icon: FileText, label: "My Resume", to: "/resume-builder" },
-                  { icon: Map, label: "Roadmaps", to: "/roadmaps" },
-                  { icon: FolderGit2, label: "Projects", to: "/dashboard" },
-                  { icon: Trophy, label: "Achievements", to: "/dashboard" },
-                  { icon: Award, label: "Certificates", to: "/dashboard" },
-                  { icon: Settings, label: "Settings", to: "/dashboard" },
-                ].map(({ icon: Icon, label, to }) => (
-                  <li key={label}>
-                    <Link to={to} onClick={() => setOpen(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 transition hover:bg-black/5" style={{ color: "#0F172A" }}>
-                      <Icon className="h-4 w-4 opacity-70" /> {label}
-                    </Link>
-                  </li>
-                ))}
-                <li>
-                  <button
-                    onClick={async () => { setOpen(false); await signOut(); window.location.href = "/"; }}
-                    className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left transition hover:bg-red-50"
-                    style={{ color: "#B91C1C" }}
-                  >
-                    <LogOut className="h-4 w-4" /> Logout
+              <div className="min-w-0">
+                <h4 className="truncate text-sm font-bold tracking-tight text-zinc-900 leading-tight">
+                  {user.fullName || "Utkarsh Verma"}
+                </h4>
+                <p className="mt-0.5 truncate text-[11px] text-zinc-500 font-semibold tracking-wide">
+                  AI Engineer
+                </p>
+              </div>
+            </div>
+
+            {/* Menu Items */}
+            <ul className="space-y-0.5 text-[13px]">
+              {[
+                { icon: UserIcon, label: "My Profile" },
+                { icon: Settings, label: "Account Settings" },
+                { icon: HelpCircle, label: "Help" },
+              ].map((item) => (
+                <li key={item.label}>
+                  <button className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-zinc-600 transition-colors duration-150 hover:bg-black/5 hover:text-zinc-900 group">
+                    <item.icon className="h-4 w-4 text-zinc-400 transition-colors duration-150 group-hover:text-zinc-600" />
+                    <span className="font-semibold">{item.label}</span>
                   </button>
                 </li>
-              </ul>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              ))}
+
+              <div className="my-1.5 h-px" style={{ background: "rgba(9, 9, 11, 0.06)" }} />
+
+              <li>
+                <button
+                  onClick={async () => {
+                    setOpen(false);
+                    await signOut();
+                    window.location.href = "/";
+                  }}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-rose-600 transition-colors duration-150 hover:bg-rose-50 hover:text-rose-700 font-semibold group"
+                >
+                  <LogOut className="h-4 w-4 text-rose-500 transition-colors duration-150 group-hover:text-rose-600" />
+                  <span>Logout</span>
+                </button>
+              </li>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

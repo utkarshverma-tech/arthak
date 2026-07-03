@@ -364,9 +364,13 @@ export function Header() {
           <a href="#about" className="rounded-md px-3 py-2 text-sm font-medium transition hover:bg-black/5" style={{ color: "#0F172A" }}>
             About
           </a>
-          <a href="#dashboard" className="rounded-md px-3 py-2 text-sm font-medium transition hover:bg-black/5" style={{ color: "#0F172A" }}>
+          <Link
+            to="/dashboard"
+            className="rounded-md px-3 py-2 text-sm font-medium transition hover:bg-black/5"
+            style={{ color: "#0F172A" }}
+          >
             Dashboard
-          </a>
+          </Link>
         </nav>
 
         {/* Right actions */}
