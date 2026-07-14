@@ -16,6 +16,7 @@ import { reportError } from "../lib/error-reporting";
 import { AuthProvider } from "../lib/auth/AuthContext";
 import { AuthModal } from "../components/auth/AuthModal";
 import { ArthakLoader } from "../components/auth/ArthakLoader";
+import { TopLoader } from "../components/TopLoader";
 
 function NotFoundComponent() {
   return (
@@ -93,6 +94,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       {
+        rel: "preconnect",
+        href: "https://fonts.googleapis.com",
+      },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap",
+      },
+      {
         rel: "stylesheet",
         href: appCss,
       },
@@ -121,6 +135,7 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const isPending = useRouterState({ select: (s) => s.status === "pending" });
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [mounted, setMounted] = useState(false);
   const [activeRequests, setActiveRequests] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -166,6 +181,8 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        {/* Premium top-of-page navigation progress bar */}
+        <TopLoader />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <AuthModal />

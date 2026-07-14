@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Search, ChevronDown, Menu, X, ArrowRight, ArrowUpRight, Sparkles } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
+import NProgress from "nprogress";
 import { CATEGORIES } from "@/lib/roadmaps-data";
 import logoImg from "@/assets/logo.png";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { UserMenu } from "@/components/auth/UserMenu";
 
 export function Header() {
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [roadmapsOpen, setRoadmapsOpen] = useState(false);
   const [activeCat, setActiveCat] = useState<string | null>(null);
@@ -381,7 +383,7 @@ export function Header() {
             <>
               <button
                 type="button"
-                onClick={() => openModal("login")}
+                onClick={() => { NProgress.start(); navigate({ to: "/login", search: { view: "login" } }); }}
                 className="hidden sm:inline-flex rounded-full border px-4 py-2 text-sm font-medium transition hover:bg-black/5"
                 style={{ color: "#0F172A", borderColor: "rgba(15,23,42,0.15)" }}
               >
@@ -389,7 +391,7 @@ export function Header() {
               </button>
               <button
                 type="button"
-                onClick={() => openModal("signup")}
+                onClick={() => { NProgress.start(); navigate({ to: "/login", search: { view: "signup" } }); }}
                 className="hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
                 style={{
                   background: "linear-gradient(135deg, #14B8A6, #3B82F6)",
@@ -508,7 +510,7 @@ export function Header() {
               <>
                 <button
                   type="button"
-                  onClick={() => { setMobileOpen(false); openModal("login"); }}
+                  onClick={() => { setMobileOpen(false); NProgress.start(); navigate({ to: "/login", search: { view: "login" } }); }}
                   className="text-left py-1.5 text-sm font-medium font-semibold"
                   style={{ color: "#0F172A" }}
                 >
@@ -516,7 +518,7 @@ export function Header() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => { setMobileOpen(false); openModal("signup"); }}
+                  onClick={() => { setMobileOpen(false); NProgress.start(); navigate({ to: "/login", search: { view: "signup" } }); }}
                   className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-white"
                   style={{ background: "linear-gradient(135deg, #14B8A6, #3B82F6)" }}
                 >

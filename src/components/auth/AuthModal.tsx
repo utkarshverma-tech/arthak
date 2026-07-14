@@ -123,7 +123,7 @@ export function AuthModal() {
           right: 0;
           bottom: 0;
           z-index: 100;
-          background: rgba(15, 23, 42, 0.3);
+          background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
           backdrop-filter: blur(12px);
           -webkit-backdrop-filter: blur(12px);
           padding: 24px 16px;
@@ -140,11 +140,11 @@ export function AuthModal() {
           max-height: 90vh;
           overflow: hidden;
           border-radius: 24px;
-          background: rgba(255, 255, 255, 0.8);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          border: 1px solid rgba(17, 24, 39, 0.08);
-          box-shadow: 0 30px 80px rgba(17,24,39,0.08), 0 10px 40px -10px rgba(20,184,166,0.04), inset 0 1px 0 rgba(255,255,255,0.7);
+          background: rgba(255, 255, 255, 0.12);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          box-shadow: 0 8px 32px rgba(0,0,0,0.37);
           position: relative;
         }
 

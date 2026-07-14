@@ -2,6 +2,45 @@
 @source "../src";
 @import "tw-animate-css";
 
+/* ─── Premium NProgress Top Loader ────────────────────────────────────────── */
+
+/* Bar container */
+#nprogress {
+  pointer-events: none;
+}
+
+/* The actual bar */
+#nprogress .bar {
+  position: fixed;
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #06B6D4, #3B82F6, #7C3AED);
+  box-shadow:
+    0 0 8px  rgba(99, 102, 241, 0.7),
+    0 0 18px rgba(59, 130, 246, 0.4),
+    0 0 32px rgba(6,  182, 212, 0.25);
+  border-radius: 0 2px 2px 0;
+}
+
+/* Peg — the bright right-edge flare */
+#nprogress .peg {
+  display: block;
+  position: absolute;
+  right: 0;
+  width: 120px;
+  height: 100%;
+  opacity: 0.6;
+  transform: rotate(3deg) translate(0, -4px);
+  background: linear-gradient(to right, transparent, #fff);
+}
+
+/* Hide the default spinner entirely */
+#nprogress .spinner { display: none !important; }
+
+
 @custom-variant dark (&:is(.dark *));
 
 /*
@@ -188,4 +227,21 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .arthak-grid-cell { transition: none; transform: none !important; }
+}
+
+/* Login Page — SSR-safe entrance animations */
+@keyframes loginPageSlideIn {
+  from { opacity: 0; transform: translateX(60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes loginCardSpring {
+  0%   { opacity: 0; transform: translateY(32px) scale(0.96); }
+  60%  { opacity: 1; transform: translateY(-4px) scale(1.005); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.login-page-enter {
+  animation: loginPageSlideIn 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+.login-card-enter {
+  animation: loginCardSpring 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
 }

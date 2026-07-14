@@ -7,11 +7,11 @@ export function ProtectedRoute({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      openModal("login");
+      window.location.href = "/login?view=login";
     } else if (!loading && isAuthenticated && user?.isFirstLogin) {
-      openModal("signup");
+      window.location.href = "/login?view=signup";
     }
-  }, [loading, isAuthenticated, openModal, user]);
+  }, [loading, isAuthenticated, user]);
 
   if (loading) {
     return (
@@ -34,7 +34,7 @@ export function ProtectedRoute({ children }: { children: ReactNode }) {
               : "Please complete your career profile setup to continue."}
           </p>
           <button
-            onClick={() => openModal(user ? "signup" : "login")}
+            onClick={() => { window.location.href = user ? "/login?view=signup" : "/login?view=login"; }}
             className="mt-4 inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-semibold text-white"
             style={{ background: "linear-gradient(135deg, #14B8A6, #3B82F6)" }}
           >
