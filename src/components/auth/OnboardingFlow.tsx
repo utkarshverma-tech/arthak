@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, ArrowLeft, Check, Loader2, Sparkles } from "lucide-react";
 import { authService } from "@/lib/auth/authService";
 import { profileService, type OnboardingProfile } from "@/lib/auth/ProfileService";
+import { useAuth } from "@/lib/auth/AuthContext";
 
 type Step = {
   key: keyof OnboardingProfile;
@@ -30,6 +31,7 @@ export function OnboardingFlow({ displayName, onDone }: { displayName?: string; 
   const step = STEPS[idx];
   const total = STEPS.length;
   const progress = ((idx + 1) / total) * 100;
+  const { refresh } = useAuth();
 
   const currentValue = profile[step.key];
   const canNext =
@@ -56,6 +58,7 @@ export function OnboardingFlow({ displayName, onDone }: { displayName?: string; 
       try {
         await profileService.save(profile);
         authService.markOnboarded();
+        await refresh(); // Force refresh the Auth session to update isFirstLogin to false!
         await new Promise((r) => setTimeout(r, 2200));
         onDone();
       } catch (err) {

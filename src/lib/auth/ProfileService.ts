@@ -9,6 +9,15 @@ export interface OnboardingProfile {
   experience?: string;
   goal?: string;
   studyTime?: string;
+  fullName?: string;
+  
+  // New user editable fields
+  location?: string;
+  gender?: string;
+  dob?: string;
+  phone?: string;
+  languages?: string[];
+  aboutMe?: string;
 }
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
@@ -43,6 +52,13 @@ export const profileService = {
         experience: data.experience,
         goal: data.goal,
         studyTime: data.studyTime,
+        fullName: data.fullName,
+        location: data.location,
+        gender: data.gender,
+        dob: data.dob,
+        phone: data.phone,
+        languages: data.languages,
+        aboutMe: data.aboutMe,
       };
     } catch (e) {
       console.error("Error fetching profile:", e);
@@ -56,7 +72,7 @@ export const profileService = {
       throw new Error("No active session");
     }
 
-    const fullName = session.user.user_metadata?.full_name || session.user.email?.split("@")[0] || "";
+    const fullName = profile.fullName || session.user.user_metadata?.full_name || session.user.email?.split("@")[0] || "";
 
     const response = await fetch(`${BACKEND_URL}/api/profiles`, {
       method: "POST",
@@ -74,6 +90,12 @@ export const profileService = {
         experience: profile.experience,
         goal: profile.goal,
         studyTime: profile.studyTime,
+        location: profile.location,
+        gender: profile.gender,
+        dob: profile.dob,
+        phone: profile.phone,
+        languages: profile.languages,
+        aboutMe: profile.aboutMe,
       }),
     });
 

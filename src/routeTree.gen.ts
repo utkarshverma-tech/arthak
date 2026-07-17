@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as RoadmapsRouteImport } from './routes/roadmaps'
 import { Route as ResumeEditorRouteImport } from './routes/resume-editor'
 import { Route as ResumeBuilderRouteImport } from './routes/resume-builder'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
@@ -29,6 +30,11 @@ const ResumeEditorRoute = ResumeEditorRouteImport.update({
 const ResumeBuilderRoute = ResumeBuilderRouteImport.update({
   id: '/resume-builder',
   path: '/resume-builder',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
   '/resume-builder': typeof ResumeBuilderRoute
   '/resume-editor': typeof ResumeEditorRoute
   '/roadmaps': typeof RoadmapsRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
   '/resume-builder': typeof ResumeBuilderRoute
   '/resume-editor': typeof ResumeEditorRoute
   '/roadmaps': typeof RoadmapsRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
   '/resume-builder': typeof ResumeBuilderRoute
   '/resume-editor': typeof ResumeEditorRoute
   '/roadmaps': typeof RoadmapsRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/login'
+    | '/profile'
     | '/resume-builder'
     | '/resume-editor'
     | '/roadmaps'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/login'
+    | '/profile'
     | '/resume-builder'
     | '/resume-editor'
     | '/roadmaps'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/login'
+    | '/profile'
     | '/resume-builder'
     | '/resume-editor'
     | '/roadmaps'
@@ -103,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
+  ProfileRoute: typeof ProfileRoute
   ResumeBuilderRoute: typeof ResumeBuilderRoute
   ResumeEditorRoute: typeof ResumeEditorRoute
   RoadmapsRoute: typeof RoadmapsRoute
@@ -129,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/resume-builder'
       fullPath: '/resume-builder'
       preLoaderRoute: typeof ResumeBuilderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -159,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
+  ProfileRoute: ProfileRoute,
   ResumeBuilderRoute: ResumeBuilderRoute,
   ResumeEditorRoute: ResumeEditorRoute,
   RoadmapsRoute: RoadmapsRoute,
