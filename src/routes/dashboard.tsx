@@ -15,6 +15,7 @@ import {
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { Header } from "@/components/Header";
+import logoImg from "@/assets/logo.png";
 
 export const Route = createFileRoute("/dashboard")({
   component: () => (
@@ -192,10 +193,17 @@ function Sidebar({ open, setOpen }: { open: boolean; setOpen: (v: boolean) => vo
       }`}
       style={{ borderRight: `1px solid ${C.line}`, background: C.panel }}
     >
-      <div className="h-[72px] px-5 flex items-center justify-end lg:hidden" style={{ borderBottom: `1px solid ${C.line}` }}>
+      <div className="h-[72px] px-5 flex items-center justify-between lg:hidden" style={{ borderBottom: `1px solid ${C.line}` }}>
+        <Link to="/" className="relative w-36 h-16 flex items-center shrink-0">
+          <img
+            src={logoImg}
+            alt="Arthak Logo"
+            className="absolute left-[-70px] top-[calc(50%-6px)] -translate-y-1/2 h-52 w-auto max-w-none object-contain pointer-events-none"
+          />
+        </Link>
         <button
           onClick={() => setOpen(false)}
-          className="h-8 w-8 grid place-items-center rounded-lg hover:bg-black/[0.04] transition cursor-pointer"
+          className="h-8 w-8 grid place-items-center rounded-lg hover:bg-black/[0.04] transition cursor-pointer z-10"
           aria-label="Close"
         >
           <ArrowLeft className="h-4 w-4" style={{ color: C.muted }} />
