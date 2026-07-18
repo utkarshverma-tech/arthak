@@ -31,7 +31,7 @@ export function Header() {
           <img
             src={logoImg}
             alt="Arthak Logo"
-            className="absolute left-[-70px] top-[calc(50%-6px)] -translate-y-1/2 h-52 w-auto max-w-none object-contain"
+            className="absolute left-[-70px] top-[calc(50%-6px)] -translate-y-1/2 h-52 w-auto max-w-none object-contain pointer-events-none"
           />
         </Link>
 
