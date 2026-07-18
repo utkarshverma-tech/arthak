@@ -616,11 +616,6 @@ function ProfileHeaderCard() {
                 </div>
               )}
             </div>
-
-            {/* Status green dot at bottom-left */}
-            <span className="absolute bottom-1.5 left-1.5 flex h-3.5 w-3.5 z-10">
-              <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-[#10B981] border-2" style={{ borderColor: C.bg }}></span>
-            </span>
           </div>
 
           {/* Pencil Edit Icon Badge overlay at bottom-right of avatar rectangle */}
