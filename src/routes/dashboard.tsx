@@ -86,41 +86,43 @@ function DashboardShell() {
             <div className="flex lg:hidden mb-6">
               <button
                 onClick={() => setSidebarOpen((v) => !v)}
-                className="group relative flex h-11 w-11 items-center justify-center rounded-full border transition-all duration-300 hover:scale-[1.08] active:scale-[0.95] shadow-sm hover:shadow-md cursor-pointer"
+                className="group relative flex h-10 w-10 items-center justify-center rounded-xl border bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] transition-all duration-200 hover:bg-zinc-50 active:scale-95 cursor-pointer"
                 style={{
-                  borderColor: sidebarOpen ? C.accent : C.line,
-                  backgroundColor: sidebarOpen ? C.accent : "rgba(255, 255, 255, 0.9)",
+                  borderColor: C.line,
+                  color: C.ink,
                 }}
+                aria-label="Toggle menu"
               >
-                <AnimatePresence mode="wait">
-                  {sidebarOpen ? (
-                    <motion.div
-                      key="close"
-                      initial={{ rotate: -90, opacity: 0, scale: 0.8 }}
-                      animate={{ rotate: 0, opacity: 1, scale: 1 }}
-                      exit={{ rotate: 90, opacity: 0, scale: 0.8 }}
-                      transition={{ duration: 0.2 }}
-                      className="flex items-center justify-center"
-                    >
-                      <X className="h-4 w-4 text-white" />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="menu"
-                      initial={{ rotate: 90, opacity: 0, scale: 0.8 }}
-                      animate={{ rotate: 0, opacity: 1, scale: 1 }}
-                      exit={{ rotate: -90, opacity: 0, scale: 0.8 }}
-                      transition={{ duration: 0.2 }}
-                      className="relative flex items-center justify-center"
-                    >
-                      <span className="absolute -top-1 -right-1 flex h-1.5 w-1.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#14B8A6] opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#14B8A6]"></span>
-                      </span>
-                      <Menu className="h-4 w-4" style={{ color: C.accentDeep }} />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div className="relative h-4 w-4">
+                  {/* Top Line */}
+                  <span
+                    className="absolute left-0 h-[1.5px] bg-current rounded-full transition-all duration-300"
+                    style={{
+                      width: "16px",
+                      top: sidebarOpen ? "7.25px" : "3px",
+                      transform: sidebarOpen ? "rotate(45deg)" : "none",
+                    }}
+                  />
+                  {/* Middle Line */}
+                  <span
+                    className="absolute left-0 h-[1.5px] bg-current rounded-full transition-all duration-200"
+                    style={{
+                      width: "16px",
+                      top: "7.25px",
+                      opacity: sidebarOpen ? 0 : 1,
+                      transform: sidebarOpen ? "scale(0)" : "none",
+                    }}
+                  />
+                  {/* Bottom Line */}
+                  <span
+                    className="absolute left-0 h-[1.5px] bg-current rounded-full transition-all duration-300"
+                    style={{
+                      width: "16px",
+                      top: sidebarOpen ? "7.25px" : "11.5px",
+                      transform: sidebarOpen ? "rotate(-45deg)" : "none",
+                    }}
+                  />
+                </div>
               </button>
             </div>
 
