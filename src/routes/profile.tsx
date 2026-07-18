@@ -581,7 +581,7 @@ function ProfileHeaderCard() {
         <div className="absolute -top-16 left-6 sm:left-8 h-28 w-28 sm:h-32 sm:w-32">
           {/* Avatar image container */}
           <div 
-            className="h-full w-full rounded-full border-4 overflow-hidden relative shadow-lg"
+            className="h-full w-full rounded-[24px] border-4 overflow-hidden relative shadow-lg"
             style={{ borderColor: C.bg, backgroundColor: C.surface }}
           >
             <div 
@@ -598,16 +598,16 @@ function ProfileHeaderCard() {
               )}
             </div>
 
-            {/* Status green dot */}
-            <span className="absolute bottom-1 right-2 flex h-3.5 w-3.5 z-10">
+            {/* Status green dot at bottom-left */}
+            <span className="absolute bottom-1.5 left-1.5 flex h-3.5 w-3.5 z-10">
               <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-[#10B981] border-2" style={{ borderColor: C.bg }}></span>
             </span>
           </div>
 
-          {/* Pencil Edit Icon Badge overlay at top-right of avatar circle */}
+          {/* Pencil Edit Icon Badge overlay at bottom-right of avatar rectangle */}
           <button 
             onClick={handleAvatarUpload}
-            className="absolute top-1 right-1 h-7 w-7 rounded-full bg-white border shadow-md flex items-center justify-center text-slate-600 hover:text-[#14B8A6] hover:scale-110 transition z-20 cursor-pointer"
+            className="absolute bottom-1.5 right-1.5 h-7 w-7 rounded-full bg-white border shadow-md flex items-center justify-center text-slate-600 hover:text-[#14B8A6] hover:scale-110 transition z-20 cursor-pointer"
             style={{ borderColor: C.borderStrong }}
             title="Upload Photo"
           >
