@@ -379,20 +379,7 @@ function ProfileShell() {
   const [loading, setLoading] = useState(true);
   const [isEditOpen, setIsEditOpen] = useState(false);
 
-  // Force dark theme colors to match the user's template image
-  const C = {
-    bg: "#080B11",
-    surface: "#0E1320",
-    card: "rgba(14, 19, 32, 0.8)",
-    primary: "#14B8A6",
-    secondary: "#6366F1",
-    accent: "#14B8A6",
-    highlight: "#10B981",
-    text: "#FFFFFF",
-    muted: "#94A3B8",
-    border: "rgba(255, 255, 255, 0.06)",
-    borderStrong: "rgba(255, 255, 255, 0.12)",
-  };
+  const C = getColors(isWarm);
 
   const refreshProfile = async () => {
     try {
@@ -422,30 +409,11 @@ function ProfileShell() {
         <div className="min-h-screen font-sans antialiased transition-colors duration-300" style={{ background: C.bg, color: C.text }}>
           <MeshBackdrop />
           
-          {/* Scoped CSS to override sticky header style for profile page only */}
+          {/* Keep body background in sync with theme */}
           <style>{`
-            header.sticky {
-              background-color: rgba(8, 11, 17, 0.85) !important;
-              border-color: rgba(255, 255, 255, 0.06) !important;
-            }
-            header.sticky a, header.sticky button {
-              color: #E2E8F0 !important;
-            }
-            header.sticky a:hover, header.sticky button:hover {
-              color: #FFFFFF !important;
-            }
-            header.sticky input {
-              color: #FFFFFF !important;
-            }
-            header.sticky input::placeholder {
-              color: #94A3B8 !important;
-            }
-            header.sticky div[style*="background-color: rgba(255, 255, 255, 0.7)"] {
-              background-color: rgba(255, 255, 255, 0.05) !important;
-              border-color: rgba(255, 255, 255, 0.1) !important;
-            }
             body {
-              background-color: #080B11 !important;
+              background-color: ${C.bg} !important;
+              color: ${C.text} !important;
             }
           `}</style>
 
@@ -488,7 +456,7 @@ function ProfilePageContent() {
   const [activeTab, setActiveTab] = useState<Tab>("About");
 
   return (
-    <div className="min-h-screen text-[#FFFFFF] antialiased pt-2 flex flex-col gap-6">
+    <div className="min-h-screen antialiased pt-2 flex flex-col gap-6">
       {/* Banner & User Meta Card at the top */}
       <ProfileHeaderCard />
 
@@ -584,60 +552,29 @@ function ProfileHeaderCard() {
   };
 
   return (
-    <div className="rounded-[24px] border bg-[#0E1320]/80 backdrop-blur-xl overflow-hidden shadow-lg" style={{ borderColor: C.border }}>
+    <div className="rounded-[24px] border overflow-hidden shadow-lg transition-all duration-300" style={{ borderColor: C.border, background: C.card }}>
       {/* Banner area */}
       <div 
-        className="h-44 sm:h-52 w-full relative overflow-hidden bg-gradient-to-br from-[#050811] to-[#0E1626]"
-        style={bannerImage ? { backgroundImage: `url(${bannerImage})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}
+        className="h-44 sm:h-52 w-full relative overflow-hidden"
+        style={
+          bannerImage 
+            ? { backgroundImage: `url(${bannerImage})`, backgroundSize: "cover", backgroundPosition: "center" } 
+            : {
+                backgroundColor: "#FAF7F2",
+                backgroundImage: "radial-gradient(circle at 15% 20%, rgba(255, 90, 31, 0.12) 0%, transparent 55%), radial-gradient(circle at 85% 15%, rgba(59, 130, 246, 0.08) 0%, transparent 50%), radial-gradient(circle at 50% 80%, rgba(20, 184, 166, 0.06) 0%, transparent 50%)"
+              }
+        }
       >
-        {/* SVG Mountain graphic if no user image banner is uploaded */}
-        {!bannerImage && (
-          <svg className="absolute right-0 bottom-0 h-full w-[60%] opacity-60 pointer-events-none" viewBox="0 0 600 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M 0 100 L 600 100" stroke="rgba(255,255,255,0.02)" strokeWidth="1" />
-            <path d="M 0 150 L 600 150" stroke="rgba(255,255,255,0.02)" strokeWidth="1" />
-            <path d="M 150 0 L 150 200" stroke="rgba(255,255,255,0.02)" strokeWidth="1" />
-            <path d="M 300 0 L 300 200" stroke="rgba(255,255,255,0.02)" strokeWidth="1" />
-            <path d="M 450 0 L 450 200" stroke="rgba(255,255,255,0.02)" strokeWidth="1" />
-            <path d="M 150 200 L 250 120 L 350 200" fill="rgba(20,184,166,0.03)" />
-            <path d="M 350 200 L 480 70 L 600 200" fill="rgba(99,102,241,0.04)" />
-            <path d="M 250 200 L 450 30 L 600 200 Z" fill="url(#mountainGrad)" opacity="0.8" />
-            <path d="M 260 200 Q 320 160 350 130 T 420 70 T 450 32" stroke="url(#pathGrad)" strokeWidth="1.5" strokeDasharray="4 4" />
-            <circle cx="280" cy="188" r="3" fill="#14B8A6" filter="drop-shadow(0 0 4px #14B8A6)" />
-            <circle cx="330" cy="150" r="3.5" fill="#14B8A6" filter="drop-shadow(0 0 4px #14B8A6)" />
-            <circle cx="380" cy="105" r="3" fill="#14B8A6" filter="drop-shadow(0 0 4px #14B8A6)" />
-            <circle cx="420" cy="70" r="3.5" fill="#14B8A6" filter="drop-shadow(0 0 4px #14B8A6)" />
-            <line x1="450" y1="30" x2="450" y2="10" stroke="#14B8A6" strokeWidth="1.5" />
-            <path d="M 450 10 L 475 16 L 450 22 Z" fill="#14B8A6" />
-            <g transform="translate(438, 20)">
-              <circle cx="5" cy="2" r="1.5" fill="#FFFFFF" />
-              <line x1="5" y1="3.5" x2="5" y2="7" stroke="#FFFFFF" strokeWidth="1.2" />
-              <line x1="2" y1="4.5" x2="8" y2="4.5" stroke="#FFFFFF" strokeWidth="1" />
-              <line x1="5" y1="7" x2="3.5" y2="10" stroke="#FFFFFF" strokeWidth="1" />
-              <line x1="5" y1="7" x2="6.5" y2="10" stroke="#FFFFFF" strokeWidth="1" />
-            </g>
-            <defs>
-              <linearGradient id="mountainGrad" x1="450" y1="30" x2="450" y2="200" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#0B1323" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="#050811" stopOpacity="0.95" />
-              </linearGradient>
-              <linearGradient id="pathGrad" x1="250" y1="200" x2="450" y2="30" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#6366F1" />
-                <stop offset="100%" stopColor="#14B8A6" />
-              </linearGradient>
-            </defs>
-          </svg>
-        )}
-
         {/* Banner text */}
         <div className="absolute left-8 top-1/2 -translate-y-1/2 text-left">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white/90">From Confusion</h2>
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0F172A]">From Confusion</h2>
           <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#14B8A6] to-[#0D9488] mt-1">To Career</h2>
         </div>
 
         {/* Edit banner button */}
         <button 
           onClick={handleBannerUpload}
-          className="absolute right-6 top-6 rounded-lg bg-black/40 border border-white/10 px-3 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-md transition hover:bg-black/60 flex items-center gap-1.5"
+          className="absolute right-6 top-6 rounded-lg bg-black/45 border border-white/15 px-3 py-1.5 text-xs font-semibold text-white/95 backdrop-blur-md transition hover:bg-black/60 flex items-center gap-1.5 cursor-pointer"
         >
           <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           Edit Banner
@@ -647,14 +584,20 @@ function ProfileHeaderCard() {
       {/* Profile Info Row below banner */}
       <div className="px-6 sm:px-8 pb-6 relative pt-16 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
         {/* Avatar overlapping container */}
-        <div className="absolute -top-16 left-6 sm:left-8 h-28 w-28 sm:h-32 sm:w-32 rounded-full border-4 border-[#080B11] bg-[#0E1320] overflow-hidden group shadow-lg">
+        <div 
+          className="absolute -top-16 left-6 sm:left-8 h-28 w-28 sm:h-32 sm:w-32 rounded-full border-4 overflow-hidden group shadow-lg"
+          style={{ borderColor: C.bg, backgroundColor: C.surface }}
+        >
           <div 
             className="h-full w-full bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: avatarImage ? `url(${avatarImage})` : undefined }}
           >
             {!avatarImage && (
-              <div className="h-full w-full flex items-center justify-center bg-slate-800 text-white text-3xl font-bold">
-                {displayName.charAt(0)}
+              <div className="h-full w-full flex items-center justify-center bg-white">
+                <svg viewBox="0 0 24 24" fill="#8A8F98" style={{ width: "60px", height: "60px", marginTop: "4px" }}>
+                  <circle cx="12" cy="8.2" r="4.5" />
+                  <path d="M12 14c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5z" />
+                </svg>
               </div>
             )}
           </div>
@@ -668,14 +611,14 @@ function ProfileHeaderCard() {
           
           {/* Status green dot */}
           <span className="absolute bottom-1 right-2 flex h-3.5 w-3.5">
-            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-[#10B981] border-2 border-[#080B11]"></span>
+            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-[#10B981] border-2" style={{ borderColor: C.bg }}></span>
           </span>
         </div>
 
         {/* Profile Info Details */}
         <div className="flex-1 text-left flex flex-col gap-1.5 md:pl-36">
           <div className="flex items-center gap-2">
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">{displayName}</h2>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight" style={{ color: C.text }}>{displayName}</h2>
             <svg className="h-5 w-5 text-[#10B981] fill-current" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
           </div>
           
@@ -686,7 +629,7 @@ function ProfileHeaderCard() {
             </span>
           </div>
 
-          <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-400">
+          <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs" style={{ color: C.muted }}>
             <div className="flex items-center gap-1">
               <MapPin className="h-3.5 w-3.5" />
               <span>{displayLocation}</span>
@@ -706,13 +649,14 @@ function ProfileHeaderCard() {
         <div className="flex items-center gap-3 shrink-0 self-start md:self-end">
           <button 
             onClick={onEditClick}
-            className="h-10 px-4 rounded-xl border border-slate-700 bg-transparent text-[13px] font-semibold text-white transition hover:bg-white/5 flex items-center gap-1.5"
+            className="h-10 px-4 rounded-xl border bg-transparent text-[13px] font-semibold transition hover:bg-black/5 flex items-center gap-1.5 cursor-pointer"
+            style={{ color: C.text, borderColor: C.borderStrong }}
           >
-            <Pencil className="h-4 w-4" />
+            <Pencil className="h-4 w-4" style={{ color: C.muted }} />
             Edit Profile
           </button>
           <button 
-            className="h-10 px-4 rounded-xl bg-[#14B8A6] text-[13px] font-semibold text-white transition hover:bg-[#0D9488] shadow-md flex items-center gap-1.5"
+            className="h-10 px-4 rounded-xl bg-[#14B8A6] text-[13px] font-semibold text-white transition hover:bg-[#0D9488] shadow-md flex items-center gap-1.5 cursor-pointer"
           >
             <Globe className="h-4 w-4" />
             View Public Profile
@@ -725,16 +669,6 @@ function ProfileHeaderCard() {
 
 function StatsRow() {
   const { C } = useContext(ThemeContext);
-  const { profile } = useContext(ProfileContext);
-
-  const filledFields = profile ? Object.values(profile).filter(v => v !== undefined && (!Array.isArray(v) || v.length > 0)).length : 0;
-  const completion = profile ? Math.min(100, Math.round(((filledFields + 2) / 11) * 100)) : 84;
-
-  const size = 64;
-  const stroke = 5;
-  const radius = (size - stroke) / 2;
-  const circ = 2 * Math.PI * radius;
-  const offset = circ - (completion / 100) * circ;
 
   const cards = [
     {
@@ -742,105 +676,55 @@ function StatsRow() {
       value: "12",
       sub: "3 this month",
       Icon: ClipboardCheck,
-      color: "#3B82F6",
-      tint: "bg-blue-500/10 text-blue-400",
+      tint: "bg-blue-500/10 text-blue-500",
     },
     {
       label: "Projects",
       value: "6",
       sub: "2 in progress",
       Icon: FolderKanban,
-      color: "#8B5CF6",
-      tint: "bg-purple-500/10 text-purple-400",
+      tint: "bg-purple-500/10 text-purple-500",
     },
     {
       label: "Certificates",
       value: "9",
       sub: "Earned",
       Icon: Award,
-      color: "#F59E0B",
-      tint: "bg-amber-500/10 text-amber-400",
+      tint: "bg-amber-500/10 text-amber-600",
     },
     {
       label: "Badges",
       value: "7",
       sub: "Unlocked",
       Icon: Trophy,
-      color: "#10B981",
-      tint: "bg-emerald-500/10 text-emerald-400",
+      tint: "bg-emerald-500/10 text-emerald-600",
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
-      {/* Profile Score Card (Takes 2 columns) */}
-      <div 
-        className="rounded-[20px] border bg-[#0E1320]/80 p-5 shadow-sm flex items-center justify-between col-span-1 sm:col-span-2 gap-4 text-left"
-        style={{ borderColor: C.border }}
-      >
-        <div className="flex flex-col justify-between h-full">
-          <div>
-            <p className="text-[11.5px] font-bold uppercase tracking-wider text-slate-400">Profile Score</p>
-            <p className="mt-2 text-[13px] text-slate-300 font-medium">Good going! Keep improving 🚀</p>
-          </div>
-          <button className="mt-3.5 h-8 px-4 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] font-bold text-white transition self-start border border-slate-800">
-            Improve Now
-          </button>
-        </div>
-
-        {/* Circular Progress Gauge */}
-        <div className="relative shrink-0 flex items-center justify-center" style={{ width: size, height: size }}>
-          <svg className="absolute inset-0 -rotate-90" width={size} height={size}>
-            <circle
-              cx={size / 2}
-              cy={size / 2}
-              r={radius}
-              stroke="rgba(255, 255, 255, 0.05)"
-              strokeWidth={stroke}
-              fill="none"
-            />
-            <circle
-              cx={size / 2}
-              cy={size / 2}
-              r={radius}
-              stroke="#14B8A6"
-              strokeWidth={stroke}
-              strokeLinecap="round"
-              fill="none"
-              strokeDasharray={circ}
-              strokeDashoffset={offset}
-              style={{ transition: "stroke-dashoffset 0.6s ease" }}
-            />
-          </svg>
-          <div className="text-center flex flex-col items-center justify-center absolute">
-            <span className="text-[15px] font-extrabold leading-none text-white">{completion}</span>
-            <span className="text-[9px] font-semibold text-slate-500 mt-0.5">/100</span>
-          </div>
-        </div>
-      </div>
-
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* Other 4 Stats Cards */}
       {cards.map((c) => (
         <div
           key={c.label}
-          className="rounded-[20px] border bg-[#0E1320]/80 p-5 shadow-sm flex flex-col justify-between text-left"
-          style={{ borderColor: C.border }}
+          className="rounded-[20px] border p-5 shadow-sm flex flex-col justify-between text-left"
+          style={{ borderColor: C.border, background: C.card }}
         >
           <div className="flex items-center justify-between w-full">
             <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${c.tint}`}>
               <c.Icon className="h-4.5 w-4.5" />
             </div>
-            <span className="text-slate-500 hover:text-white transition cursor-pointer text-xs flex items-center gap-0.5 font-bold uppercase tracking-wider">
+            <span className="text-slate-400 hover:text-slate-600 transition cursor-pointer text-xs flex items-center gap-0.5 font-bold uppercase tracking-wider">
               <span className="hidden sm:inline">View All</span>
               <ArrowUpRight className="h-3.5 w-3.5" />
             </span>
           </div>
 
           <div className="mt-5">
-            <p className="text-[11.5px] font-bold uppercase tracking-wider text-slate-500">{c.label}</p>
+            <p className="text-[11.5px] font-bold uppercase tracking-wider" style={{ color: C.muted }}>{c.label}</p>
             <div className="mt-1 flex items-baseline gap-1.5">
-              <span className="text-2xl font-extrabold tracking-tight text-white">{c.value}</span>
-              <span className="text-[11px] font-semibold text-slate-400">{c.sub}</span>
+              <span className="text-2xl font-extrabold tracking-tight" style={{ color: C.text }}>{c.value}</span>
+              <span className="text-[11px] font-semibold" style={{ color: C.muted }}>{c.sub}</span>
             </div>
           </div>
         </div>
