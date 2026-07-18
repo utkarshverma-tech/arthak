@@ -590,7 +590,7 @@ function ProfileHeaderCard() {
             >
               {!avatarImage && (
                 <div className="h-full w-full flex items-center justify-center bg-white">
-                  <svg viewBox="0 0 24 24" fill="#8A8F98" style={{ width: "50px", height: "50px", marginTop: "4px" }}>
+                  <svg viewBox="0 0 24 24" fill="#000000" style={{ width: "50px", height: "50px", marginTop: "4px" }}>
                     <circle cx="12" cy="8.2" r="4.5" />
                     <path d="M12 14c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5z" />
                   </svg>
