@@ -145,6 +145,11 @@ export function UserMenu() {
           right: 0;
           z-index: 10000;
           font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+          max-width: calc(100vw - 32px);
+          pointer-events: none;
+        }
+        .user-menu-scoped-container .dropdown-wrap * {
+          pointer-events: auto;
         }
 
         .user-menu-scoped-container .avatar-trigger {
@@ -162,6 +167,7 @@ export function UserMenu() {
 
         .user-menu-scoped-container .dropdown {
           width:410px;
+          max-width: 100%;
           background:var(--bg);
           border-radius:var(--radius-outer);
           box-shadow:0 30px 70px rgba(10,10,10,.16), 0 4px 16px rgba(10,10,10,.06);
@@ -173,6 +179,21 @@ export function UserMenu() {
         }
         .user-menu-scoped-container .dropdown::-webkit-scrollbar{ width:6px; }
         .user-menu-scoped-container .dropdown::-webkit-scrollbar-thumb{ background:#EAEAEA; border-radius:10px; }
+
+        @media (max-width: 480px) {
+          .user-menu-scoped-container .dropdown-wrap {
+            position: fixed;
+            top: 64px;
+            left: 16px;
+            right: 16px;
+            width: auto;
+            max-width: none;
+          }
+          .user-menu-scoped-container .dropdown {
+            width: 100%;
+            max-width: none;
+          }
+        }
 
         /* stagger items only when open */
         .user-menu-scoped-container .stagger{ opacity:0; transform:translateY(6px); }
