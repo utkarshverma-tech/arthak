@@ -509,6 +509,24 @@ function ProfileHeaderCard() {
     }
   }, [user]);
 
+  // Sync uploads in real-time between components
+  useEffect(() => {
+    const handleAvatarUpdate = () => {
+      const localAvatar = localStorage.getItem("arthak_profile_avatar");
+      setAvatarImage(localAvatar);
+    };
+    const handleBannerUpdate = () => {
+      const localBanner = localStorage.getItem("arthak_profile_banner");
+      setBannerImage(localBanner);
+    };
+    window.addEventListener("avatar_updated", handleAvatarUpdate);
+    window.addEventListener("banner_updated", handleBannerUpdate);
+    return () => {
+      window.removeEventListener("avatar_updated", handleAvatarUpdate);
+      window.removeEventListener("banner_updated", handleBannerUpdate);
+    };
+  }, []);
+
   // Handle avatar/banner change
   const handleBannerUpload = () => {
     const input = document.createElement("input");
@@ -523,6 +541,7 @@ function ProfileHeaderCard() {
           const urlStr = ev.target.result as string;
           setBannerImage(urlStr);
           localStorage.setItem("arthak_profile_banner", urlStr);
+          window.dispatchEvent(new Event("banner_updated"));
         }
       };
       reader.readAsDataURL(file);

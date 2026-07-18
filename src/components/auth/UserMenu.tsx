@@ -89,6 +89,7 @@ export function UserMenu() {
         const urlStr = ev.target.result as string;
         setBannerImage(urlStr);
         localStorage.setItem("arthak_profile_banner", urlStr);
+        window.dispatchEvent(new Event("banner_updated"));
       }
     };
     reader.readAsDataURL(file);
@@ -111,7 +112,7 @@ export function UserMenu() {
     reader.readAsDataURL(file);
   };
 
-  // Sync avatar changes back to trigger if changed elsewhere
+  // Sync avatar and banner changes back to trigger if changed elsewhere
   useEffect(() => {
     const handleAvatarUpdate = () => {
       const localAvatar = localStorage.getItem("arthak_profile_avatar");
@@ -119,9 +120,17 @@ export function UserMenu() {
         setAvatarImage(localAvatar);
       }
     };
+    const handleBannerUpdate = () => {
+      const localBanner = localStorage.getItem("arthak_profile_banner");
+      if (localBanner) {
+        setBannerImage(localBanner);
+      }
+    };
     window.addEventListener("avatar_updated", handleAvatarUpdate);
+    window.addEventListener("banner_updated", handleBannerUpdate);
     return () => {
       window.removeEventListener("avatar_updated", handleAvatarUpdate);
+      window.removeEventListener("banner_updated", handleBannerUpdate);
     };
   }, []);
 
