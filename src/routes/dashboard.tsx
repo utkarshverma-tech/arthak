@@ -81,16 +81,32 @@ function DashboardShell() {
         </AnimatePresence>
 
         <div className="flex-1 min-w-0 flex flex-col">
-          <main className="flex-1 px-6 lg:px-12 py-10 mx-auto w-full max-w-[1440px]">
+          <main className="flex-1 px-6 lg:px-12 pt-5 pb-10 lg:py-10 mx-auto w-full max-w-[1440px]">
             {/* Mobile Menu trigger */}
             <div className="flex lg:hidden mb-6">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="flex items-center gap-1.5 rounded-xl border bg-white/80 px-3.5 py-2 text-xs font-bold shadow-soft transition hover:bg-slate-900/5 cursor-pointer"
-                style={{ borderColor: C.line, color: C.ink }}
+                className="group flex items-center gap-2 rounded-full border bg-white/90 backdrop-blur-md px-4 py-2.5 text-xs font-bold transition-all duration-300 hover:scale-[1.04] active:scale-[0.98] shadow-sm hover:shadow-md cursor-pointer relative overflow-hidden"
+                style={{
+                  borderColor: C.line,
+                  color: C.ink,
+                }}
               >
-                <Menu className="h-4 w-4" />
-                <span>Dashboard Menu</span>
+                {/* Subtle background glow effect on hover */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                  style={{
+                    background: `radial-gradient(circle at center, ${C.accentGlow} 0%, transparent 80%)`
+                  }}
+                />
+                
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#14B8A6] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#14B8A6]"></span>
+                </span>
+                
+                <Menu className="h-3.5 w-3.5 stroke-[2.5]" style={{ color: C.accentDeep }} />
+                <span className="tracking-wider uppercase font-extrabold text-[10px]">Menu</span>
               </button>
             </div>
 
