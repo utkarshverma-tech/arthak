@@ -565,54 +565,54 @@ function ProfileHeaderCard() {
               }
         }
       >
-        {/* Banner text */}
-        <div className="absolute left-8 top-1/2 -translate-y-1/2 text-left">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0F172A]">From Confusion</h2>
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#14B8A6] to-[#0D9488] mt-1">To Career</h2>
-        </div>
-
         {/* Edit banner button */}
         <button 
           onClick={handleBannerUpload}
-          className="absolute right-6 top-6 rounded-lg bg-black/45 border border-white/15 px-3 py-1.5 text-xs font-semibold text-white/95 backdrop-blur-md transition hover:bg-black/60 flex items-center gap-1.5 cursor-pointer"
+          className="absolute right-6 top-6 h-9 w-9 rounded-full bg-black/45 border border-white/15 flex items-center justify-center text-white backdrop-blur-md transition hover:bg-black/60 hover:scale-105 cursor-pointer"
+          title="Edit Banner"
         >
-          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          Edit Banner
+          <Pencil className="h-4 w-4" />
         </button>
       </div>
 
       {/* Profile Info Row below banner */}
       <div className="px-6 sm:px-8 pb-6 relative pt-16 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
         {/* Avatar overlapping container */}
-        <div 
-          className="absolute -top-16 left-6 sm:left-8 h-28 w-28 sm:h-32 sm:w-32 rounded-full border-4 overflow-hidden group shadow-lg"
-          style={{ borderColor: C.bg, backgroundColor: C.surface }}
-        >
+        <div className="absolute -top-16 left-6 sm:left-8 h-28 w-28 sm:h-32 sm:w-32">
+          {/* Avatar image container */}
           <div 
-            className="h-full w-full bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: avatarImage ? `url(${avatarImage})` : undefined }}
+            className="h-full w-full rounded-full border-4 overflow-hidden relative shadow-lg"
+            style={{ borderColor: C.bg, backgroundColor: C.surface }}
           >
-            {!avatarImage && (
-              <div className="h-full w-full flex items-center justify-center bg-white">
-                <svg viewBox="0 0 24 24" fill="#8A8F98" style={{ width: "60px", height: "60px", marginTop: "4px" }}>
-                  <circle cx="12" cy="8.2" r="4.5" />
-                  <path d="M12 14c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5z" />
-                </svg>
-              </div>
-            )}
+            <div 
+              className="h-full w-full bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: avatarImage ? `url(${avatarImage})` : undefined }}
+            >
+              {!avatarImage && (
+                <div className="h-full w-full flex items-center justify-center bg-white">
+                  <svg viewBox="0 0 24 24" fill="#8A8F98" style={{ width: "50px", height: "50px", marginTop: "4px" }}>
+                    <circle cx="12" cy="8.2" r="4.5" />
+                    <path d="M12 14c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5z" />
+                  </svg>
+                </div>
+              )}
+            </div>
+
+            {/* Status green dot */}
+            <span className="absolute bottom-1 right-2 flex h-3.5 w-3.5 z-10">
+              <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-[#10B981] border-2" style={{ borderColor: C.bg }}></span>
+            </span>
           </div>
-          {/* Avatar edit overlay */}
+
+          {/* Pencil Edit Icon Badge overlay at top-right of avatar circle */}
           <button 
             onClick={handleAvatarUpload}
-            className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center cursor-pointer"
+            className="absolute top-1 right-1 h-7 w-7 rounded-full bg-white border shadow-md flex items-center justify-center text-slate-600 hover:text-[#14B8A6] hover:scale-110 transition z-20 cursor-pointer"
+            style={{ borderColor: C.borderStrong }}
+            title="Upload Photo"
           >
-            <Pencil className="h-5 w-5 text-white" />
+            <Pencil className="h-3.5 w-3.5" />
           </button>
-          
-          {/* Status green dot */}
-          <span className="absolute bottom-1 right-2 flex h-3.5 w-3.5">
-            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-[#10B981] border-2" style={{ borderColor: C.bg }}></span>
-          </span>
         </div>
 
         {/* Profile Info Details */}
@@ -742,7 +742,7 @@ function TabsBar({
 }) {
   const { C } = useContext(ThemeContext);
   return (
-    <div className="rounded-[18px] border bg-[#0E1320]/80 px-2 shadow-soft" style={{ borderColor: C.border }}>
+    <div className="rounded-[18px] border px-2 shadow-soft transition-all duration-300" style={{ borderColor: C.border, background: C.card }}>
       <div className="scrollbar-none flex items-center gap-1 overflow-x-auto whitespace-nowrap">
         {tabs.map((t) => {
           const active = t === activeTab;
@@ -750,12 +750,8 @@ function TabsBar({
             <button
               key={t}
               onClick={() => onChange(t)}
-              className={
-                "relative shrink-0 px-4 py-3.5 text-[13.5px] font-semibold transition " +
-                (active
-                  ? "text-white"
-                  : "text-slate-400 hover:text-white")
-              }
+              className="relative shrink-0 px-4 py-3.5 text-[13.5px] font-bold transition-all duration-150 cursor-pointer"
+              style={{ color: active ? C.text : C.muted }}
             >
               {t}
               {active && (
@@ -803,18 +799,19 @@ function SectionCard({
 }) {
   const { C } = useContext(ThemeContext);
   return (
-    <section className="rounded-[24px] border bg-[#0E1320]/80 backdrop-blur-xl shadow-soft" style={{ borderColor: C.border }}>
+    <section className="rounded-[24px] border backdrop-blur-xl shadow-soft transition-all duration-300" style={{ borderColor: C.border, background: C.card }}>
       <header className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: C.border }}>
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 text-[#14B8A6]">
             <Icon className="h-4.5 w-4.5" />
           </div>
-          <h3 className="text-[15px] font-semibold tracking-tight text-white">{title}</h3>
+          <h3 className="text-[15px] font-semibold tracking-tight" style={{ color: C.text }}>{title}</h3>
         </div>
         {action && (
           <button
             onClick={onAction}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-transparent px-3 py-1.5 text-[11.5px] font-semibold text-slate-300 transition hover:bg-white/5"
+            className="inline-flex items-center gap-1.5 rounded-lg border bg-transparent px-3 py-1.5 text-[11.5px] font-semibold transition hover:bg-black/5 cursor-pointer"
+            style={{ color: C.text, borderColor: C.borderStrong }}
           >
             <Pencil className="h-3.5 w-3.5" />
             {action}
@@ -852,25 +849,26 @@ function AboutMeCard() {
     "I am a College Student focused on Master's. Currently preparing for a career as a Full Stack Developer with a daily study commit of 6+ hours. I love building projects and solving real-world problems.";
 
   return (
-    <section className="rounded-[24px] border bg-[#0E1320]/80 backdrop-blur-xl shadow-sm text-left overflow-hidden" style={{ borderColor: C.border }}>
+    <section className="rounded-[24px] border backdrop-blur-xl shadow-sm text-left overflow-hidden transition-all duration-300" style={{ borderColor: C.border, background: C.card }}>
       <header className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: C.border }}>
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 text-[#14B8A6]">
             <UserRound className="h-4.5 w-4.5" />
           </div>
-          <h3 className="text-[15px] font-semibold tracking-tight text-white">About Me</h3>
+          <h3 className="text-[15px] font-semibold tracking-tight" style={{ color: C.text }}>About Me</h3>
         </div>
         <button
           onClick={onEditClick}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-transparent px-3 py-1.5 text-[11.5px] font-semibold text-slate-300 transition hover:bg-white/5"
+          className="inline-flex items-center gap-1.5 rounded-lg border bg-transparent px-3 py-1.5 text-[11.5px] font-semibold transition hover:bg-black/5 cursor-pointer"
+          style={{ color: C.text, borderColor: C.borderStrong }}
         >
-          <Pencil className="h-3.5 w-3.5" />
+          <Pencil className="h-3.5 w-3.5" style={{ color: C.muted }} />
           Edit
         </button>
       </header>
       
       <div className="px-6 py-6 flex flex-col gap-6">
-        <p className="text-[13.5px] leading-relaxed text-slate-300">
+        <p className="text-[13.5px] leading-relaxed" style={{ color: C.text, opacity: 0.85 }}>
           {summary}
         </p>
 
@@ -887,14 +885,18 @@ function AboutMeCard() {
 }
 
 function MetaDetailCard({ icon: Icon, label, value }: { icon: any; label: string; value: string }) {
+  const { C } = useContext(ThemeContext);
   return (
-    <div className="flex items-center gap-3.5 rounded-xl bg-[#161B26] p-3.5 border border-slate-800/40">
-      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-800 text-slate-400">
+    <div 
+      className="flex items-center gap-3.5 rounded-xl p-3.5 border transition-all duration-300"
+      style={{ background: C.surface, borderColor: C.border }}
+    >
+      <div className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 bg-black/5">
         <Icon className="h-4.5 w-4.5" />
       </div>
       <div className="text-left min-w-0">
-        <p className="text-[11px] font-semibold text-slate-400 tracking-wide uppercase">{label}</p>
-        <p className="text-[13px] font-medium text-white truncate mt-0.5">{value}</p>
+        <p className="text-[11px] font-bold tracking-wide uppercase" style={{ color: C.muted }}>{label}</p>
+        <p className="text-[13px] font-semibold truncate mt-0.5" style={{ color: C.text }}>{value}</p>
       </div>
     </div>
   );
@@ -904,18 +906,18 @@ function EducationCard() {
   const { C } = useContext(ThemeContext);
   const { profile } = useContext(ProfileContext);
   return (
-    <section className="rounded-[24px] border bg-[#0E1320]/80 backdrop-blur-xl shadow-sm text-left overflow-hidden" style={{ borderColor: C.border }}>
+    <section className="rounded-[24px] border backdrop-blur-xl shadow-sm text-left overflow-hidden transition-all duration-300" style={{ borderColor: C.border, background: C.card }}>
       <header className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: C.border }}>
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-400">
             <GraduationCap className="h-4.5 w-4.5" />
           </div>
-          <h3 className="text-[15px] font-semibold tracking-tight text-white">Education</h3>
+          <h3 className="text-[15px] font-semibold tracking-tight" style={{ color: C.text }}>Education</h3>
         </div>
       </header>
 
       <div className="px-6 py-6">
-        <ol className="relative space-y-6 border-l pl-6 border-slate-800">
+        <ol className="relative space-y-6 border-l pl-6" style={{ borderColor: C.border }}>
           <EduItem
             school="Future University"
             degree={profile?.education || "Bachelor of Computer Applications (BCA)"}
@@ -959,23 +961,25 @@ function EduItem({
   period: string;
   current?: boolean;
 }) {
+  const { C } = useContext(ThemeContext);
   return (
     <li className="relative text-left">
       <span
         className={
           "absolute -left-[32px] top-1.5 h-3.5 w-3.5 rounded-full border-2 " +
-          (current ? "border-[#14B8A6] bg-[#14B8A6]" : "border-slate-700 bg-[#0E1320]")
+          (current ? "border-[#14B8A6] bg-[#14B8A6]" : "")
         }
+        style={!current ? { borderColor: C.borderStrong, backgroundColor: C.surface } : {}}
       />
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
-          <h4 className="text-[14px] font-bold text-white">{school}</h4>
-          <p className="mt-0.5 text-[13px] text-slate-300">{degree}</p>
-          <p className="mt-0.5 text-[11.5px] text-slate-500">{meta}</p>
+          <h4 className="text-[14px] font-bold" style={{ color: C.text }}>{school}</h4>
+          <p className="mt-0.5 text-[13px]" style={{ color: C.text, opacity: 0.85 }}>{degree}</p>
+          <p className="mt-0.5 text-[11.5px]" style={{ color: C.muted }}>{meta}</p>
         </div>
         <div className="text-right">
           <p className="text-[12.5px] font-bold text-[#14B8A6]">{score}</p>
-          <p className="text-[11px] text-slate-500 mt-0.5">{period}</p>
+          <p className="text-[11px] mt-0.5" style={{ color: C.muted }}>{period}</p>
         </div>
       </div>
     </li>
@@ -998,18 +1002,19 @@ function TopSkillsCard() {
   ];
 
   return (
-    <section className="rounded-[24px] border bg-[#0E1320]/80 backdrop-blur-xl shadow-sm text-left overflow-hidden" style={{ borderColor: C.border }}>
+    <section className="rounded-[24px] border backdrop-blur-xl shadow-sm text-left overflow-hidden transition-all duration-300" style={{ borderColor: C.border, background: C.card }}>
       <header className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: C.border }}>
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 text-[#14B8A6]">
             <svg className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           </div>
-          <h3 className="text-[15px] font-semibold tracking-tight text-white">Top Skills</h3>
+          <h3 className="text-[15px] font-semibold tracking-tight" style={{ color: C.text }}>Top Skills</h3>
         </div>
         <button
-          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-transparent px-3 py-1.5 text-[11.5px] font-semibold text-slate-300 transition hover:bg-white/5"
+          className="inline-flex items-center gap-1.5 rounded-lg border bg-transparent px-3 py-1.5 text-[11.5px] font-semibold transition hover:bg-black/5 cursor-pointer"
+          style={{ color: C.text, borderColor: C.borderStrong }}
         >
-          <Pencil className="h-3.5 w-3.5" />
+          <Pencil className="h-3.5 w-3.5" style={{ color: C.muted }} />
           Edit
         </button>
       </header>
@@ -1019,14 +1024,18 @@ function TopSkillsCard() {
           {skills.map((s) => (
             <span 
               key={s} 
-              className="inline-flex items-center gap-1 rounded-lg border border-slate-800 bg-[#161B26] px-3 py-1.5 text-[12.5px] font-medium text-slate-200 shadow-sm"
+              className="inline-flex items-center gap-1 rounded-lg border px-3 py-1.5 text-[12.5px] font-bold shadow-sm"
+              style={{ background: C.surface, borderColor: C.border, color: C.text }}
             >
               {s}
             </span>
           ))}
         </div>
         
-        <button className="h-9 w-full rounded-xl border border-dashed border-slate-700 bg-transparent text-[12px] font-semibold text-slate-400 hover:text-white hover:border-slate-500 transition flex items-center justify-center gap-1">
+        <button 
+          className="h-9 w-full rounded-xl border border-dashed bg-transparent text-[12px] font-semibold transition flex items-center justify-center gap-1 cursor-pointer"
+          style={{ borderColor: C.borderStrong, color: C.muted }}
+        >
           <Plus className="h-3.5 w-3.5" />
           Add Skill
         </button>
@@ -1047,18 +1056,19 @@ function InterestsCard() {
   ];
 
   return (
-    <section className="rounded-[24px] border bg-[#0E1320]/80 backdrop-blur-xl shadow-sm text-left overflow-hidden" style={{ borderColor: C.border }}>
+    <section className="rounded-[24px] border backdrop-blur-xl shadow-sm text-left overflow-hidden transition-all duration-300" style={{ borderColor: C.border, background: C.card }}>
       <header className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: C.border }}>
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-pink-500/10 text-pink-400">
             <Heart className="h-4.5 w-4.5" />
           </div>
-          <h3 className="text-[15px] font-semibold tracking-tight text-white">Interests</h3>
+          <h3 className="text-[15px] font-semibold tracking-tight" style={{ color: C.text }}>Interests</h3>
         </div>
         <button
-          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-transparent px-3 py-1.5 text-[11.5px] font-semibold text-slate-300 transition hover:bg-white/5"
+          className="inline-flex items-center gap-1.5 rounded-lg border bg-transparent px-3 py-1.5 text-[11.5px] font-semibold transition hover:bg-black/5 cursor-pointer"
+          style={{ color: C.text, borderColor: C.borderStrong }}
         >
-          <Pencil className="h-3.5 w-3.5" />
+          <Pencil className="h-3.5 w-3.5" style={{ color: C.muted }} />
           Edit
         </button>
       </header>
@@ -1068,7 +1078,8 @@ function InterestsCard() {
           {interests.map((i) => (
             <span 
               key={i} 
-              className="inline-flex items-center rounded-lg border border-slate-800 bg-[#161B26] px-3 py-1.5 text-[12.5px] font-medium text-slate-300"
+              className="inline-flex items-center rounded-lg border px-3 py-1.5 text-[12.5px] font-bold"
+              style={{ background: C.surface, borderColor: C.border, color: C.text }}
             >
               {i}
             </span>
@@ -1085,18 +1096,19 @@ function SkillsCard() {
   const skills = profile?.skills || [];
 
   return (
-    <section className="rounded-[24px] border bg-[#0E1320]/80 backdrop-blur-xl shadow-sm text-left overflow-hidden" style={{ borderColor: C.border }}>
+    <section className="rounded-[24px] border backdrop-blur-xl shadow-sm text-left overflow-hidden transition-all duration-300" style={{ borderColor: C.border, background: C.card }}>
       <header className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: C.border }}>
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 text-[#14B8A6]">
             <Sparkles className="h-4.5 w-4.5" />
           </div>
-          <h3 className="text-[15px] font-semibold tracking-tight text-white">Skills</h3>
+          <h3 className="text-[15px] font-semibold tracking-tight" style={{ color: C.text }}>Skills</h3>
         </div>
         <button
-          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-transparent px-3 py-1.5 text-[11.5px] font-semibold text-slate-300 transition hover:bg-white/5"
+          className="inline-flex items-center gap-1.5 rounded-lg border bg-transparent px-3 py-1.5 text-[11.5px] font-semibold transition hover:bg-black/5 cursor-pointer"
+          style={{ color: C.text, borderColor: C.borderStrong }}
         >
-          <Plus className="h-3.5 w-3.5" />
+          <Plus className="h-3.5 w-3.5" style={{ color: C.muted }} />
           Add Skill
         </button>
       </header>
@@ -1105,7 +1117,8 @@ function SkillsCard() {
         {skills.map((s) => (
           <span 
             key={s} 
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-800 bg-[#161B26] px-4 py-2 text-[13px] font-semibold text-slate-200 shadow-soft"
+            className="inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-[13px] font-bold shadow-soft"
+            style={{ background: C.surface, borderColor: C.border, color: C.text }}
           >
             {s}
           </span>
@@ -1139,16 +1152,19 @@ const projects = [
 function ProjectsCard() {
   const { C } = useContext(ThemeContext);
   return (
-    <section className="rounded-[24px] border bg-[#0E1320]/80 backdrop-blur-xl shadow-sm text-left overflow-hidden" style={{ borderColor: C.border }}>
+    <section className="rounded-[24px] border backdrop-blur-xl shadow-sm text-left overflow-hidden transition-all duration-300" style={{ borderColor: C.border, background: C.card }}>
       <header className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: C.border }}>
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10 text-purple-400">
             <FolderKanban className="h-4.5 w-4.5" />
           </div>
-          <h3 className="text-[15px] font-semibold tracking-tight text-white">Recent Projects</h3>
+          <h3 className="text-[15px] font-semibold tracking-tight" style={{ color: C.text }}>Recent Projects</h3>
         </div>
-        <button className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-transparent px-3 py-1.5 text-[11.5px] font-semibold text-slate-300 transition hover:bg-white/5">
-          <Plus className="h-3.5 w-3.5" />
+        <button 
+          className="inline-flex items-center gap-1.5 rounded-lg border bg-transparent px-3 py-1.5 text-[11.5px] font-semibold transition hover:bg-black/5 cursor-pointer"
+          style={{ color: C.text, borderColor: C.borderStrong }}
+        >
+          <Plus className="h-3.5 w-3.5" style={{ color: C.muted }} />
           Add Project
         </button>
       </header>
@@ -1157,29 +1173,42 @@ function ProjectsCard() {
         {projects.map((p) => (
           <div
             key={p.name}
-            className="flex flex-col gap-4 rounded-2xl border border-slate-800 bg-[#161B26]/40 p-5 transition hover:border-[#14B8A6]/20 md:flex-row md:items-center md:justify-between"
+            className="flex flex-col gap-4 rounded-2xl border p-5 transition md:flex-row md:items-center md:justify-between"
+            style={{ background: C.surface, borderColor: C.border }}
           >
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <h4 className="text-[14.5px] font-bold text-white">{p.name}</h4>
-                <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold ${p.status === "Live" ? "bg-emerald-500/10 text-emerald-400" : "bg-amber-500/10 text-amber-400"}`}>
+                <h4 className="text-[14.5px] font-bold" style={{ color: C.text }}>{p.name}</h4>
+                <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold ${p.status === "Live" ? "bg-emerald-500/10 text-emerald-600" : "bg-amber-500/10 text-amber-600"}`}>
                   {p.status}
                 </span>
               </div>
-              <p className="mt-1 text-[13px] text-slate-400">{p.desc}</p>
+              <p className="mt-1 text-[13px]" style={{ color: C.text, opacity: 0.85 }}>{p.desc}</p>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {p.stack.map((s) => (
-                  <span key={s} className="rounded-lg bg-slate-800 px-2.5 py-0.5 text-[11.5px] font-medium text-slate-300 border border-slate-700/50">{s}</span>
+                  <span 
+                    key={s} 
+                    className="rounded-lg px-2.5 py-0.5 text-[11.5px] font-semibold border shadow-sm"
+                    style={{ background: C.card, borderColor: C.border, color: C.text }}
+                  >
+                    {s}
+                  </span>
                 ))}
               </div>
             </div>
             <div className="flex shrink-0 items-center gap-2">
-              <button className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 bg-[#161B26] hover:bg-slate-800 transition text-slate-400 hover:text-white">
+              <button 
+                className="inline-flex h-9 w-9 items-center justify-center rounded-lg border transition cursor-pointer"
+                style={{ background: C.card, borderColor: C.borderStrong, color: C.text }}
+              >
                 <Github className="h-4.5 w-4.5" />
               </button>
-              <button className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-[#161B26] px-3 py-2 text-[12.5px] font-semibold transition hover:bg-slate-800 text-white">
+              <button 
+                className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[12.5px] font-bold transition cursor-pointer"
+                style={{ background: C.card, borderColor: C.borderStrong, color: C.text }}
+              >
                 Live
-                <ExternalLink className="h-3.5 w-3.5 text-slate-400" />
+                <ExternalLink className="h-3.5 w-3.5" style={{ color: C.muted }} />
               </button>
             </div>
           </div>
@@ -1200,35 +1229,41 @@ const docs = [
 function DocumentsCard() {
   const { C } = useContext(ThemeContext);
   return (
-    <section className="rounded-[24px] border bg-[#0E1320]/80 backdrop-blur-xl shadow-sm text-left overflow-hidden" style={{ borderColor: C.border }}>
+    <section className="rounded-[24px] border backdrop-blur-xl shadow-sm text-left overflow-hidden transition-all duration-300" style={{ borderColor: C.border, background: C.card }}>
       <header className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: C.border }}>
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 text-[#14B8A6]">
             <FileText className="h-4.5 w-4.5" />
           </div>
-          <h3 className="text-[15px] font-semibold tracking-tight text-white">Documents & Links</h3>
+          <h3 className="text-[15px] font-semibold tracking-tight" style={{ color: C.text }}>Documents & Links</h3>
         </div>
-        <button className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-transparent px-3 py-1.5 text-[11.5px] font-semibold text-slate-300 transition hover:bg-white/5">
-          <Plus className="h-3.5 w-3.5" />
+        <button 
+          className="inline-flex items-center gap-1.5 rounded-lg border bg-transparent px-3 py-1.5 text-[11.5px] font-semibold transition hover:bg-black/5 cursor-pointer"
+          style={{ color: C.text, borderColor: C.borderStrong }}
+        >
+          <Plus className="h-3.5 w-3.5" style={{ color: C.muted }} />
           Upload
         </button>
       </header>
 
       <div className="px-6 py-6">
-        <ul className="divide-y divide-slate-800/40">
+        <ul className="divide-y" style={{ borderColor: C.border }}>
           {docs.map((d) => (
             <li key={d.name} className="flex items-center justify-between py-3.5 first:pt-0 last:pb-0">
               <div className="flex min-w-0 items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#161B26] text-slate-400">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 bg-black/5">
                   <d.Icon className="h-4.5 w-4.5" />
                 </div>
                 <div className="min-w-0 text-left">
-                  <p className="truncate text-[13.5px] font-semibold text-white">{d.name}</p>
-                  <p className="text-[11.5px] text-slate-500">{d.size}</p>
+                  <p className="truncate text-[13.5px] font-semibold" style={{ color: C.text }}>{d.name}</p>
+                  <p className="text-[11.5px]" style={{ color: C.muted }}>{d.size}</p>
                 </div>
               </div>
-              <button className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-700 bg-[#161B26] text-slate-400 hover:text-white transition">
-                <Download className="h-4 w-4" />
+              <button 
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border transition cursor-pointer"
+                style={{ background: C.card, borderColor: C.borderStrong, color: C.text }}
+              >
+                <Download className="h-4 w-4" style={{ color: C.muted }} />
               </button>
             </li>
           ))}
@@ -1248,13 +1283,13 @@ const achievements = [
 function AchievementsCard() {
   const { C } = useContext(ThemeContext);
   return (
-    <section className="rounded-[24px] border bg-[#0E1320]/80 backdrop-blur-xl shadow-sm text-left overflow-hidden" style={{ borderColor: C.border }}>
+    <section className="rounded-[24px] border backdrop-blur-xl shadow-sm text-left overflow-hidden transition-all duration-300" style={{ borderColor: C.border, background: C.card }}>
       <header className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: C.border }}>
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500">
             <Trophy className="h-4.5 w-4.5" />
           </div>
-          <h3 className="text-[15px] font-semibold tracking-tight text-white">Achievements</h3>
+          <h3 className="text-[15px] font-semibold tracking-tight" style={{ color: C.text }}>Achievements</h3>
         </div>
       </header>
 
@@ -1263,19 +1298,20 @@ function AchievementsCard() {
           {achievements.map((a) => (
             <div
               key={a.label}
-              className="rounded-2xl border border-slate-800 bg-[#161B26]/30 p-4"
+              className="rounded-2xl border p-4 transition-all duration-300"
+              style={{ background: C.surface, borderColor: C.border }}
             >
               <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${a.tint}`}>
                 <a.Icon className="h-4.5 w-4.5" />
               </div>
-              <p className="mt-3 text-[12px] text-slate-500 font-medium">{a.label}</p>
-              <p className="text-[15px] font-bold text-white mt-0.5">{a.value}</p>
+              <p className="mt-3 text-[12px] font-medium" style={{ color: C.muted }}>{a.label}</p>
+              <p className="text-[15px] font-extrabold mt-0.5" style={{ color: C.text }}>{a.value}</p>
             </div>
           ))}
         </div>
 
         <div className="mt-2">
-          <h4 className="mb-3 text-[12px] font-bold uppercase tracking-wider text-slate-400">
+          <h4 className="mb-3 text-[12px] font-bold uppercase tracking-wider" style={{ color: C.muted }}>
             Badges
           </h4>
           <div className="flex flex-wrap gap-2">
@@ -1283,7 +1319,8 @@ function AchievementsCard() {
               (b) => (
                 <span
                   key={b}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-800 bg-[#161B26] px-3 py-1.5 text-[12.5px] font-medium text-slate-200 shadow-sm"
+                  className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[12.5px] font-bold shadow-sm"
+                  style={{ background: C.surface, borderColor: C.border, color: C.text }}
                 >
                   <BadgeCheck className="h-4 w-4 text-[#14B8A6]" />
                   {b}
@@ -1310,11 +1347,11 @@ function EmptyCard({
   return (
     <SectionCard title={title} icon={Icon} action="Add">
       <div className="flex flex-col items-center justify-center gap-3 py-10 text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 text-slate-400">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-black/5 text-slate-500">
           <Plus className="h-5 w-5" />
         </div>
-        <p className="text-[14px] font-semibold text-white">{title} is empty</p>
-        <p className="max-w-sm text-[13px] text-slate-400">{description}</p>
+        <p className="text-[14px] font-bold" style={{ color: C.text }}>{title} is empty</p>
+        <p className="max-w-sm text-[13px]" style={{ color: C.muted }}>{description}</p>
       </div>
     </SectionCard>
   );
@@ -1330,44 +1367,44 @@ function CareerGoalsCard() {
   const { C } = useContext(ThemeContext);
   const { profile } = useContext(ProfileContext);
   return (
-    <section className="rounded-[24px] border bg-[#0E1320]/80 backdrop-blur-xl shadow-sm text-left overflow-hidden" style={{ borderColor: C.border }}>
+    <section className="rounded-[24px] border backdrop-blur-xl shadow-sm text-left overflow-hidden transition-all duration-300" style={{ borderColor: C.border, background: C.card }}>
       <header className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: C.border }}>
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-400">
             <Target className="h-4.5 w-4.5" />
           </div>
-          <h3 className="text-[15px] font-semibold tracking-tight text-white">Career Goals</h3>
+          <h3 className="text-[15px] font-semibold tracking-tight" style={{ color: C.text }}>Career Goals</h3>
         </div>
       </header>
 
       <div className="px-6 py-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
         <Field label="Preferred Roles">
           <div className="flex flex-wrap gap-2 mt-1.5">
-            <span className="rounded-lg bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 text-xs font-semibold text-indigo-300">
+            <span className="rounded-lg bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 text-xs font-semibold text-indigo-600">
               {profile?.careerGoal || "Full Stack Developer"}
             </span>
           </div>
         </Field>
         <Field label="Primary Objective" icon={Trophy}>
-          <p className="text-[14px] font-semibold text-white mt-1">{profile?.goal || "Placement"}</p>
+          <p className="text-[14px] font-extrabold mt-1" style={{ color: C.text }}>{profile?.goal || "Placement"}</p>
         </Field>
         <Field label="Preferred Locations">
           <div className="flex flex-wrap gap-2 mt-1.5">
-            <span className="rounded-lg bg-slate-800 border border-slate-700 px-3 py-1 text-xs font-medium text-slate-300">Bangalore</span>
-            <span className="rounded-lg bg-slate-800 border border-slate-700 px-3 py-1 text-xs font-medium text-slate-300">Delhi NCR</span>
-            <span className="rounded-lg bg-slate-800 border border-slate-700 px-3 py-1 text-xs font-medium text-slate-300">Remote</span>
+            <span className="rounded-lg border px-3 py-1 text-xs font-bold" style={{ background: C.surface, borderColor: C.border, color: C.text }}>Bangalore</span>
+            <span className="rounded-lg border px-3 py-1 text-xs font-bold" style={{ background: C.surface, borderColor: C.border, color: C.text }}>Delhi NCR</span>
+            <span className="rounded-lg border px-3 py-1 text-xs font-bold" style={{ background: C.surface, borderColor: C.border, color: C.text }}>Remote</span>
           </div>
         </Field>
         <Field label="Daily Study Commitment" icon={Clock}>
-          <p className="text-[14px] font-semibold text-white mt-1">{profile?.studyTime || "6+ Hours"}</p>
+          <p className="text-[14px] font-extrabold mt-1" style={{ color: C.text }}>{profile?.studyTime || "6+ Hours"}</p>
         </Field>
         <Field label="Current Status" icon={UserRound}>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/10 border border-blue-500/25 px-2.5 py-1 text-[12px] font-semibold text-blue-300 mt-1">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/10 border border-blue-500/25 px-2.5 py-1 text-[12px] font-semibold text-blue-600 mt-1">
             {profile?.userType || "Student"}
           </span>
         </Field>
         <Field label="Expected Graduation" icon={GraduationCap}>
-          <p className="text-[14px] font-semibold text-white mt-1">{profile?.currentYear || "Final Year"}</p>
+          <p className="text-[14px] font-extrabold mt-1" style={{ color: C.text }}>{profile?.currentYear || "Final Year"}</p>
         </Field>
       </div>
     </section>
@@ -1383,9 +1420,10 @@ function Field({
   icon?: React.ComponentType<{ className?: string }>;
   children: React.ReactNode;
 }) {
+  const { C } = useContext(ThemeContext);
   return (
     <div>
-      <div className="mb-2 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+      <div className="mb-2 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider" style={{ color: C.muted }}>
         {Icon && <Icon className="h-3.5 w-3.5" />}
         {label}
       </div>
