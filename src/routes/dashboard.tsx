@@ -85,28 +85,42 @@ function DashboardShell() {
             {/* Mobile Menu trigger */}
             <div className="flex lg:hidden mb-6">
               <button
-                onClick={() => setSidebarOpen(true)}
-                className="group flex items-center gap-2 rounded-full border bg-white/90 backdrop-blur-md px-4 py-2.5 text-xs font-bold transition-all duration-300 hover:scale-[1.04] active:scale-[0.98] shadow-sm hover:shadow-md cursor-pointer relative overflow-hidden"
+                onClick={() => setSidebarOpen((v) => !v)}
+                className="group relative flex h-11 w-11 items-center justify-center rounded-full border transition-all duration-300 hover:scale-[1.08] active:scale-[0.95] shadow-sm hover:shadow-md cursor-pointer"
                 style={{
-                  borderColor: C.line,
-                  color: C.ink,
+                  borderColor: sidebarOpen ? C.accent : C.line,
+                  backgroundColor: sidebarOpen ? C.accent : "rgba(255, 255, 255, 0.9)",
                 }}
               >
-                {/* Subtle background glow effect on hover */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                  style={{
-                    background: `radial-gradient(circle at center, ${C.accentGlow} 0%, transparent 80%)`
-                  }}
-                />
-                
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#14B8A6] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#14B8A6]"></span>
-                </span>
-                
-                <Menu className="h-3.5 w-3.5 stroke-[2.5]" style={{ color: C.accentDeep }} />
-                <span className="tracking-wider uppercase font-extrabold text-[10px]">Menu</span>
+                <AnimatePresence mode="wait">
+                  {sidebarOpen ? (
+                    <motion.div
+                      key="close"
+                      initial={{ rotate: -90, opacity: 0, scale: 0.8 }}
+                      animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                      exit={{ rotate: 90, opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex items-center justify-center"
+                    >
+                      <X className="h-4 w-4 text-white" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="menu"
+                      initial={{ rotate: 90, opacity: 0, scale: 0.8 }}
+                      animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                      exit={{ rotate: -90, opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.2 }}
+                      className="relative flex items-center justify-center"
+                    >
+                      <span className="absolute -top-1 -right-1 flex h-1.5 w-1.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#14B8A6] opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#14B8A6]"></span>
+                      </span>
+                      <Menu className="h-4 w-4" style={{ color: C.accentDeep }} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </button>
             </div>
 
