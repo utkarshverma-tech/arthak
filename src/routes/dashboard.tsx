@@ -192,20 +192,7 @@ function Sidebar({ open, setOpen }: { open: boolean; setOpen: (v: boolean) => vo
       }`}
       style={{ borderRight: `1px solid ${C.line}`, background: C.panel }}
     >
-      <div className="h-[72px] px-5 flex items-center justify-between lg:hidden" style={{ borderBottom: `1px solid ${C.line}` }}>
-        <Link to="/" className="flex items-center gap-2.5">
-          <div
-            className="h-9 w-9 rounded-[11px] grid place-items-center text-white font-black text-[15px] relative overflow-hidden"
-            style={{ background: `linear-gradient(135deg, ${C.ink} 0%, #26262c 100%)` }}
-          >
-            <span className="relative z-10">A</span>
-            <span className="absolute -top-2 -right-2 h-6 w-6 rounded-full blur-md" style={{ background: C.accent, opacity: 0.6 }} />
-          </div>
-          <div>
-            <div className="text-[15px] font-bold tracking-tight">ARTHAK</div>
-            <div className="text-[9.5px] tracking-[0.14em] uppercase font-medium" style={{ color: C.muted }}>Career OS</div>
-          </div>
-        </Link>
+      <div className="h-[72px] px-5 flex items-center justify-end lg:hidden" style={{ borderBottom: `1px solid ${C.line}` }}>
         <button
           onClick={() => setOpen(false)}
           className="h-8 w-8 grid place-items-center rounded-lg hover:bg-black/[0.04] transition cursor-pointer"
