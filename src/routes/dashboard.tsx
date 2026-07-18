@@ -158,7 +158,7 @@ type NavItem = { icon: ComponentType<SVGProps<SVGSVGElement>>; label: string; to
 function Sidebar({ open, setOpen }: { open: boolean; setOpen: (v: boolean) => void }) {
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
   const groups: { heading?: string; items: NavItem[] }[] = [
-    { items: [{ icon: LayoutDashboard, label: "Dashboard", to: "/dashboard", active: true }] },
+    { items: [{ icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" }] },
     {
       heading: "Career Center",
       items: [
